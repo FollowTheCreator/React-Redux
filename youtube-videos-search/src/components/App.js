@@ -1,5 +1,5 @@
 import React from 'react';
-import Search from './Search';
+import Search from '../containers/Search';
 import VideoList from './VideoList';
 import Page from './Page';
 import YouTube from '../services/YouTube';
