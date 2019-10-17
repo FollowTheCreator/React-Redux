@@ -1,8 +1,9 @@
 import React from 'react';
 import Search from '../containers/Search';
 import VideoList from './VideoList';
-import Page from './Page';
 import YouTube from '../services/YouTube';
+import InfiniteScroll from 'react-infinite-scroller';
+import searchByKeyword from '../actions';
 
 class App extends React.Component {
     constructor(props){
@@ -65,9 +66,13 @@ class App extends React.Component {
         return(
             <div>
                 <Search onSearchChange={this.handleChange} onSearchSubmit={this.searchByKeyword} queryString={this.state.queryString} />
-                <VideoList videos={this.state.videos.items} status={this.state.isLoading} />
-                <Page pageToken={this.state.prevPageToken} handleClick={this.handlePage} value="prev" />
-                <Page pageToken={this.state.nextPageToken} handleClick={this.handlePage} value="next" />
+                <InfiniteScroll
+                    loadMore={searchByKeyword}
+                    loader={<p>Loading...</p>}
+                    hasMore={true}
+                >
+                    <VideoList videos={this.state.videos.items} status={this.state.isLoading} />
+                </InfiniteScroll>
             </div>
         )
     }
