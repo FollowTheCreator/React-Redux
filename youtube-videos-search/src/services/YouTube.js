@@ -23,7 +23,7 @@ class YouTube{
             result = await videos.json();
         }
         else{
-            videosQuery += `&chart=mostPopular&pageToken=${props.pageToken}`;
+            videosQuery += `&chart=mostPopular&pageToken=${props.pageToken}&maxResults=${props.maxResults}`;
             videos = await fetch(videosQuery);
             result = await videos.json();
             nextPageToken = result.nextPageToken;

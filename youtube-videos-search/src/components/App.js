@@ -49,8 +49,8 @@ class App extends React.Component {
 
         this.setState({
             videos: result.videos,
-            nextPageToken: result.nextPageToken,
-            prevPageToken: result.prevPageToken
+            nextPageToken: result.nextPageToken || "",
+            prevPageToken: result.prevPageToken || ""
         });
     }
 
