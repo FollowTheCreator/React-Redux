@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 
 class VideoList extends React.Component{
     render(){
-        const videos = this.props.status ? 
-        <p>Loading...</p> : 
+        const videos = 
         <ul>
             {this.props.videos.map(video => 
                 <li key={video.id}>
@@ -21,7 +20,6 @@ class VideoList extends React.Component{
 }
 
 VideoList.propTypes = {
-    status: PropTypes.bool.isRequired,
     videos: PropTypes.array.isRequired
 };
 

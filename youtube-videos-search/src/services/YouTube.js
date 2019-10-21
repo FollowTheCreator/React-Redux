@@ -9,32 +9,27 @@ class YouTube{
         let result = {};
         let videos = {};
         let nextPageToken = "";
-        let prevPageToken = "";
         let videosQuery = VIDEOS_QUERY;
 
         if(props.queryString.trim()){
             const response = await fetch(SEARCH_QUERY + `&q=${props.queryString}&pageToken=${props.pageToken}&maxResults=${props.maxResults}`);
             const videosByKeyword = await response.json();
             nextPageToken = videosByKeyword.nextPageToken;
-            prevPageToken = videosByKeyword.prevPageToken;
             const videosId = videosByKeyword.items.map(item => item.id.videoId).join(',');
             videosQuery += `&id=${videosId}`;
             videos = await fetch(videosQuery);
             result = await videos.json();
         }
         else{
-            videosQuery += `&chart=mostPopular&pageToken=${props.pageToken}`;
+            videosQuery += `&chart=mostPopular&pageToken=${props.pageToken}&maxResults=${props.maxResults}`;
             videos = await fetch(videosQuery);
             result = await videos.json();
             nextPageToken = result.nextPageToken;
-            prevPageToken = result.prevPageToken;
         }
 
         return {
             videos: result, 
-            nextPageToken: nextPageToken,
-            prevPageToken: prevPageToken,
-            ok: videos.ok
+            nextPageToken: nextPageToken
         };
     }
 }

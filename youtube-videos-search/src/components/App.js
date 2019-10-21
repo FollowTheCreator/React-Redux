@@ -6,72 +6,63 @@ import InfiniteScroll from 'react-infinite-scroller';
 import searchByKeyword from '../actions';
 
 class App extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
-            videos: {},
-            lastQueryString: "",
+            videos: [],
             queryString: "",
             pageToken: "",
             nextPageToken: "",
-            prevPageToken: "",
-            isLoading: false,
             maxResults: 3
         };
 
         this.searchByKeyword = this.searchByKeyword.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handlePage = this.handlePage.bind(this);
+        this.searchByClick = this.searchByClick.bind(this);
     }
 
-    handleChange(queryString){
+    handleChange(queryString) {
         this.setState({
             queryString: queryString
         });
     }
 
     async searchByKeyword() {
-        this.setState({
-            isLoading: true
-        });
-
         const result = await YouTube.getVideos({
             queryString: this.state.queryString,
             pageToken: this.state.pageToken,
             maxResults: this.state.maxResults
         });
-        
-        if(result.ok){
-            this.setState({
-                isLoading: false
-            });
-        }
+
+        let videos = this.state.videos;
+        videos.push(...result.videos.items);
 
         this.setState({
-            videos: result.videos,
-            nextPageToken: result.nextPageToken,
-            prevPageToken: result.prevPageToken
+            videos: videos,
+            pageToken: result.nextPageToken
         });
     }
 
-    handlePage(pageToken = ""){
+    async searchByClick(){
         this.setState({
-            pageToken: pageToken
+            videos: [],
+            pageToken: ""
         },
-        () => this.searchByKeyword());
+        () => searchByKeyword());
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <div>
-                <Search onSearchChange={this.handleChange} onSearchSubmit={this.searchByKeyword} queryString={this.state.queryString} />
+                <Search onSearchChange={this.handleChange} onSearchSubmit={this.searchByClick} queryString={this.state.queryString} />
                 <InfiniteScroll
-                    loadMore={searchByKeyword}
-                    loader={<p>Loading...</p>}
+                    pageStart={0}
+                    loadMore={this.searchByKeyword}
                     hasMore={true}
+                    loader={<p key={0}>Loading...</p>}
                 >
-                    <VideoList videos={this.state.videos.items} status={this.state.isLoading} />
+                    <VideoList videos={this.state.videos} />
                 </InfiniteScroll>
             </div>
         )
