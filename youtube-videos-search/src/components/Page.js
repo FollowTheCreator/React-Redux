@@ -32,7 +32,8 @@ class Page extends React.Component{
 Page.propTypes = {
     handleClick: PropTypes.func.isRequired,
     pageToken: PropTypes.string.isRequired,
-    value: PropTypes.string
+    value: PropTypes.string,
+    display: PropTypes.bool.isRequired
 }
 
 export default Page;
