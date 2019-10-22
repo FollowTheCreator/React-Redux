@@ -3,13 +3,14 @@ import Search from '../containers/Search';
 import VideoList from './VideoList';
 import Page from './Page';
 import YouTube from '../services/YouTube';
+import 'bootstrap/dist/css/bootstrap.css';
 
 class App extends React.Component {
     constructor(props){
         super(props);
 
         this.state = {
-            videos: {},
+            videos: [],
             lastQueryString: "",
             queryString: "",
             pageToken: "",
@@ -48,7 +49,7 @@ class App extends React.Component {
         }
 
         this.setState({
-            videos: result.videos,
+            videos: result.videos.items,
             nextPageToken: result.nextPageToken || "",
             prevPageToken: result.prevPageToken || ""
         });
@@ -65,9 +66,11 @@ class App extends React.Component {
         return(
             <div>
                 <Search onSearchChange={this.handleChange} onSearchSubmit={this.searchByKeyword} queryString={this.state.queryString} />
-                <VideoList videos={this.state.videos.items} status={this.state.isLoading} />
-                <Page pageToken={this.state.prevPageToken} handleClick={this.handlePage} value="prev" />
-                <Page pageToken={this.state.nextPageToken} handleClick={this.handlePage} value="next" />
+                <VideoList videos={this.state.videos} status={this.state.isLoading} />
+                <nav className="container d-flex justify-content-between my-5">
+                    <Page display={Boolean(this.state.videos.length)} pageToken={this.state.prevPageToken} handleClick={this.handlePage} value="◁" />
+                    <Page display={Boolean(this.state.videos.length)} pageToken={this.state.nextPageToken} handleClick={this.handlePage} value="▷" />
+                </nav>
             </div>
         )
     }

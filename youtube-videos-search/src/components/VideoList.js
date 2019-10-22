@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 class VideoList extends React.Component{
     render(){
         const videos = this.props.status ? 
-        <p>Loading...</p> : 
-        <ul>
+        <p className="display-1 text-center">Loading...</p> : 
+        <ul className="container" style={{listStyle: "none"}}>
             {this.props.videos.map(video => 
                 <li key={video.id}>
                     <Video video={video} />

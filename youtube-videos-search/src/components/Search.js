@@ -19,10 +19,10 @@ class Search extends React.Component{
 
     render(){
         return(
-            <div>
-                <input onChange={this.handleChange} value={this.props.queryString} />
-                <button onClick={this.handleSubmit}>
-                    find
+            <div className="jumbotron input-group">
+                <input className="form-control" onChange={this.handleChange} value={this.props.queryString} placeholder="Search..." />
+                <button className="input-group-append btn btn-secondary" onClick={this.handleSubmit}>
+                    Search
                 </button>
             </div>
         );

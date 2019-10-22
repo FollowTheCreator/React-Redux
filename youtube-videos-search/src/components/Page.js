@@ -13,8 +13,16 @@ class Page extends React.Component{
     }
 
     render(){
+        let className = "btn btn-outline-secondary";
+        if(this.props.display){
+            className += " d-inline";
+        }
+        else{
+            className += " d-none";
+        }
+
         return(
-            <button onClick={this.handleClick}>
+            <button className={className} onClick={this.handleClick}>
                 {this.props.value}
             </button>
         );
