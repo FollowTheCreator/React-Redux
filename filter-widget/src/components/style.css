@@ -1,0 +1,8 @@
+.filter-widget{
+    position: absolute;
+    z-index: 9;
+    width: 250px;
+    height: 400px;
+    background: rgba(34, 37, 46, 0.8);
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.5);
+}

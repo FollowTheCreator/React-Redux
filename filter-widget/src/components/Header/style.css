@@ -1,0 +1,12 @@
+.drag-hook{
+    color: white;
+    font-size: 15px;
+    cursor: move;
+    padding: 15px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    border-top: 7px solid rgba(0, 170, 255, 0.6);
+    font-family: 'Segoe UI';
+    font-weight: 100;
+    letter-spacing: 5px;
+    text-align: center;
+}
