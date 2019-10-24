@@ -1,0 +1,28 @@
+.dropdown{
+    border-bottom: 1px solid rgba(21, 23, 29, 0.4);
+}
+
+.dropdown-btn{
+    padding: 15px;
+    color: white;
+    font-size: 15px;
+    font-family: 'Segoe UI', sans-serif;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition-duration: 0.2s;
+}
+.dropdown-btn:hover{
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-btn__title{
+    display: inline;
+}
+
+.dropdown-content{
+    position: absolute;
+    z-index: 9;
+    width: 250px;
+    background: rgb(44, 48, 59);
+    box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.5);
+}

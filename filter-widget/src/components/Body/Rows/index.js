@@ -8,8 +8,17 @@ class Rows extends React.Component{
     }
 
     render(){
+        const rows = 
+        <ul className="rows">
+            {this.props.rows.map(row => 
+                <li key={row.element.id}>
+                    <Row onRowClick={this.props.onRowClick} element={row} />
+                </li>
+            )}
+        </ul>;
+
         return(
-            <Row />
+            rows
         );
     }
 }
