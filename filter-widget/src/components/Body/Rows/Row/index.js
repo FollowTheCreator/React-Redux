@@ -17,7 +17,7 @@ class Row extends React.Component{
             checked: !this.state.checked
         },
         () => {
-            this.props.onRowClick(this.props.row.element, this.state.checked);
+            this.props.onRowClick(this.props.row, this.state.checked);
         });
     }
 

@@ -10,57 +10,14 @@ class Body extends React.Component{
 
         this.onSearchChange = this.onSearchChange.bind(this);
         this.onContextClick = this.onContextClick.bind(this);
+        this.onDimensionClick = this.onDimensionClick.bind(this);
+        this.onRowClick = this.onRowClick.bind(this);
 
         this.state = {
             searchString: "",
             contexts: [],
             dimensions: [],
-            rows: [
-                {
-                    id: 'Dimension1',
-                    element: 1
-                },
-                {
-                    id: 1,
-                    element: 1
-                },
-                {
-                    id: 1,
-                    element: 1
-                },
-                {
-                    id: 1,
-                    element: 1
-                },
-                {
-                    id: 1,
-                    element: 1
-                },
-                {
-                    id: 1,
-                    element: 1
-                },
-                {
-                    id: 1,
-                    element: 1
-                },
-                {
-                    id: 1,
-                    element: 1
-                },
-                {
-                    id: 1,
-                    element: 1
-                },
-                {
-                    id: 1,
-                    element: 1
-                },
-                {
-                    id: 1,
-                    element: 1
-                }
-            ]
+            cells: []
         }
     }
 
@@ -80,8 +37,9 @@ class Body extends React.Component{
         });
     }
 
-    onContextClick(element, checked){
+    onContextClick(row, checked){
         if(checked){
+            const element = row.element;
             const headers = element.getElementsByTagName("th");
             const dimensions = [];
     
@@ -105,7 +63,7 @@ class Body extends React.Component{
             const dimensions = [];
 
             headers.map(header => {
-                if(header.parent !== element.id){
+                if(header.parent !== row.element.id){
                     dimensions.push(header);
                 }
             });
@@ -116,7 +74,48 @@ class Body extends React.Component{
         }
     }
 
-    onDimensionClick(){
+    onDimensionClick(row, checked){
+        if(checked){
+            const table = this.state.contexts.find(
+                (context) => row.parent == context.element.id
+            )
+            .element;
+            const cells = [];
+            const rows = Array.from(table.rows);
+
+            rows.map((item, index) => {
+                if(index > 0){
+                    const cell = item.cells[row.index];
+                    cell.id = cell.innerText;
+
+                    cells.push({
+                        parent: row.element.id,
+                        element: cell
+                    });
+                }
+            });
+
+            this.setState({
+                cells: [...this.state.cells, ...cells]
+            });
+        }
+        else{
+            const rows = this.state.cells;
+            const cells = [];
+
+            rows.map(item => {
+                if(item.parent !== row.element.id){
+                    cells.push(item);
+                }
+            });
+
+            this.setState({
+                cells: cells
+            });
+        }
+    }
+
+    onRowClick(){
 
     }
 
@@ -140,7 +139,10 @@ class Body extends React.Component{
                     onRowClick={this.onDimensionClick}
                 />
                 <Search onChange={this.onSearchChange}/>
-                <Rows rows={this.state.rows}/>
+                <Rows 
+                    rows={this.state.cells}
+                    onRowClick={this.onRowClick}
+                />
             </div>
         );
     }
