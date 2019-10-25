@@ -12,7 +12,7 @@ class Rows extends React.Component{
         <ul className="rows">
             {this.props.rows.map(row => 
                 <li key={row.element.id}>
-                    <Row onRowClick={this.props.onRowClick} element={row} />
+                    <Row onRowClick={this.props.onRowClick} row={row} />
                 </li>
             )}
         </ul>;

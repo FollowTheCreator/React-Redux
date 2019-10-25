@@ -80,26 +80,40 @@ class Body extends React.Component{
         });
     }
 
-    onContextClick(element){
-        const headers = element.getElementsByTagName("th");
-        const dimensions = [];
-
-        for(let i = 0; i < headers.length; i++){
-            const header = headers[i];
-            header.id = `${element.id}/${header.innerText}`;
-
-            dimensions.push({
-                element: header,
-                index: i
+    onContextClick(element, checked){
+        if(checked){
+            const headers = element.getElementsByTagName("th");
+            const dimensions = [];
+    
+            for(let i = 0; i < headers.length; i++){
+                const header = headers[i];
+                header.id = `${element.id}/${header.innerText}`;
+    
+                dimensions.push({
+                    parent: element.id,
+                    element: header,
+                    index: i
+                });
+            }
+    
+            this.setState({
+                dimensions: [...this.state.dimensions, ...dimensions]
             });
         }
+        else{
+            const headers = this.state.dimensions;
+            const dimensions = [];
 
-        const chosenDimensions = [...this.state.dimensions, ...dimensions];
+            headers.map(header => {
+                if(header.parent !== element.id){
+                    dimensions.push(header);
+                }
+            });
 
-        this.setState({
-            dimensions: chosenDimensions
-        },
-        () => console.log(this.state.dimensions));
+            this.setState({
+                dimensions: [...dimensions]
+            });
+        }
     }
 
     onDimensionClick(){

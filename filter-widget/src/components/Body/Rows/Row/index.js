@@ -15,9 +15,10 @@ class Row extends React.Component{
     onClick(){
         this.setState({
             checked: !this.state.checked
+        },
+        () => {
+            this.props.onRowClick(this.props.row.element, this.state.checked);
         });
-
-        this.props.onRowClick(this.props.element.element);
     }
 
     render(){
@@ -30,7 +31,7 @@ class Row extends React.Component{
                     ></div>
                 </div>
                 <span className="row__title">
-                    {this.props.element.element.id}
+                    {this.props.row.element.id}
                 </span>
             </label>
         );
