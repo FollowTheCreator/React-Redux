@@ -20,16 +20,6 @@ class App extends React.Component {
         }
     }
 
-    componentDidMount() {
-        document.addEventListener('mousemove', this.onMouseMove);
-        document.addEventListener('mouseup', this.onMouseUp);
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener('mousemove', this.onMouseMove);
-        document.removeEventListener('mouseup', this.onMouseUp);
-    }
-
     onMouseMove(e){
         e.preventDefault();
         
@@ -47,6 +37,9 @@ class App extends React.Component {
     }
 
     onMouseDown(e){
+        document.addEventListener('mousemove', this.onMouseMove);
+        document.addEventListener('mouseup', this.onMouseUp);
+
         this.setState({
             prevX: e.clientX,
             prevY: e.clientY,
@@ -55,6 +48,9 @@ class App extends React.Component {
     }
 
     onMouseUp(){
+        document.removeEventListener('mousemove', this.onMouseMove);
+        document.removeEventListener('mouseup', this.onMouseUp);
+
         this.setState({
             isMouseDown: false
         });

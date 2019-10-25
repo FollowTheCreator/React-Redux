@@ -22,11 +22,21 @@ class Dropdown extends React.Component{
     }
 
     render(){
+        const rows = this.props.rows
+            .filter(row => row.checked)
+            .map(row => row.element.id);
+        const checkedRows = rows.length > 5 ? 
+            rows.slice(0, 5).join(", ") + "..." :
+            rows.join(", ");
+
         return(
             <div className="dropdown">
                 <div className="dropdown-btn" onClick={this.onClick}>
                     <p className="dropdown-btn__title">
                         {this.props.title}
+                    </p>
+                    <p className="dropdown-btn__selected">
+                        {checkedRows}
                     </p>
                 </div>
                 <div

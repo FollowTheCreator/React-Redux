@@ -19,6 +19,14 @@
     display: inline;
 }
 
+.dropdown-btn__selected{
+    color: rgb(176, 192, 207);
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+    font-size: 11px;
+    line-height: 11px;
+}
+
 .dropdown-content{
     position: absolute;
     z-index: 9;
