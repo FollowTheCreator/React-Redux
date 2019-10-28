@@ -3,6 +3,7 @@ import './style.css';
 import Dropdown from './Dropdown';
 import Search from './Search';
 import Rows from './Rows';
+import StateStorage from './StateStorage';
 
 class Body extends React.Component{
     constructor(props){
@@ -15,6 +16,8 @@ class Body extends React.Component{
         this.onSortClick = this.onSortClick.bind(this);
         this.onSearchTypeClick = this.onSearchTypeClick.bind(this);
         this.search = this.search.bind(this);
+        this.onSaveClick = this.onSaveClick.bind(this);
+        this.onResetClick = this.onResetClick.bind(this);
 
         this.state = {
             sortAsc: true,
@@ -24,11 +27,16 @@ class Body extends React.Component{
             dimensions: [],
             cells: [],
             isSearching: false,
-            filteredCells: []
+            filteredCells: [],
+            stateSaved: false
         }
     }
 
     componentDidMount(){
+        const stateSaved = JSON.parse(localStorage.getItem("stateSaved"));
+        const searchType = localStorage.getItem("searchType") || "_*_";
+        const sortAsc = JSON.parse(localStorage.getItem("sortAsc"));
+
         const tables = document.getElementsByTagName("table");
         const contexts = [];
 
@@ -39,8 +47,12 @@ class Body extends React.Component{
             contexts.push({checked: false, element});
         }
 
+        const sortAscResult = sortAsc !== null ? sortAsc : true;
         this.setState({
-            contexts
+            contexts,
+            searchType: stateSaved === true ? searchType : this.state.searchType,
+            sortAsc: stateSaved === true ? sortAscResult : this.state.sortAsc,
+            stateSaved: stateSaved !== null ? stateSaved : false
         });
     }
 
@@ -255,11 +267,14 @@ class Body extends React.Component{
     }
 
     onSortClick(){
-        this.setState({
-            cells: this.state.cells.reverse(),
-            filteredCells: this.state.filteredCells.reverse(),
-            sortAsc: !this.state.sortAsc
-        });
+        this.setState(
+            {
+                cells: this.state.cells.reverse(),
+                filteredCells: this.state.filteredCells.reverse(),
+                sortAsc: !this.state.sortAsc
+            },
+            () => localStorage.setItem("sortAsc", this.state.sortAsc)
+        );
     }
 
     onSearchTypeClick(type){
@@ -267,9 +282,30 @@ class Body extends React.Component{
             {
                 searchType: type
             },
-            () => this.search(this.state.searchString)
+            () => {
+                localStorage.setItem("searchType", type);
+                this.search(this.state.searchString);
+            }
         );
     }
+
+    onSaveClick(){
+        this.setState(
+            {
+                stateSaved: true
+            },
+            () => localStorage.setItem("stateSaved", true)
+        );
+    }
+
+    onResetClick(){
+        this.setState(
+            {
+                stateSaved: false
+            },
+            () => localStorage.setItem("stateSaved", false)
+        );
+    }   
 
     render(){
         return(
@@ -294,6 +330,11 @@ class Body extends React.Component{
                 <Rows 
                     rows={this.state.isSearching ? this.state.filteredCells : this.state.cells}
                     onRowClick={this.onRowClick}
+                />
+                <StateStorage 
+                    onSaveClick={this.onSaveClick} 
+                    onResetClick={this.onResetClick} 
+                    stateSaved={this.state.stateSaved}
                 />
             </div>
         );
