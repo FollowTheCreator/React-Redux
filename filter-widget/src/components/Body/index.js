@@ -72,10 +72,13 @@ class Body extends React.Component{
                 return item;
             });
     
-            this.setState({
-                dimensions: [...this.state.dimensions, ...dimensions],
-                contexts
-            });
+            this.setState(
+                {
+                    dimensions: [...this.state.dimensions, ...dimensions],
+                    contexts
+                },
+                () => this.search(this.state.searchString)
+            );
         }
         else{
             const headers = this.state.dimensions;
@@ -110,11 +113,14 @@ class Body extends React.Component{
                 return item;
             });
 
-            this.setState({
-                dimensions,
-                cells,
-                contexts
-            });
+            this.setState(
+                {
+                    dimensions,
+                    cells,
+                    contexts
+                },
+                () => this.search(this.state.searchString)
+            );
         }
     }
 
@@ -161,11 +167,13 @@ class Body extends React.Component{
                         : this.state.sortAsc ? -1 : 1
                 );
 
-            this.setState({
-                cells: sortedCells,
-                dimensions
-            },
-            () => this.search(this.state.searchString));
+            this.setState(
+                {
+                    cells: sortedCells,
+                    dimensions
+                },
+                () => this.search(this.state.searchString)
+            );
         }
         else{
             const rows = this.state.cells;
@@ -198,11 +206,13 @@ class Body extends React.Component{
                         : this.state.sortAsc ? -1 : 1
                 );
 
-            this.setState({
-                cells: sortedCells,
-                dimensions
-            },
-            () => this.search(this.state.searchString));
+            this.setState(
+                {
+                    cells: sortedCells,
+                    dimensions
+                },
+                () => this.search(this.state.searchString)
+            );
         }
     }
 
@@ -211,11 +221,13 @@ class Body extends React.Component{
     }
 
     onSearchChange(value){
-        this.setState({
-            isSearching: value === "" ? false : true,
-            searchString: value
-        },
-        () => this.search(this.state.searchString));
+        this.setState(
+            {
+                isSearching: value === "" ? false : true,
+                searchString: value
+            },
+            () => this.search(this.state.searchString)
+        );
     }
 
     search(value){
@@ -243,27 +255,20 @@ class Body extends React.Component{
     }
 
     onSortClick(){
-        const sort = !this.state.sortAsc;
-
-        if(this.state.isSearching){
-            this.setState({
-                filteredCells: this.state.filteredCells.reverse(),
-                sortAsc: sort
-            });
-        }
-        else{
-            this.setState({
-                cells: this.state.cells.reverse(),
-                sortAsc: sort
-            });
-        }
+        this.setState({
+            cells: this.state.cells.reverse(),
+            filteredCells: this.state.filteredCells.reverse(),
+            sortAsc: !this.state.sortAsc
+        });
     }
 
     onSearchTypeClick(type){
-        this.setState({
-            searchType: type
-        },
-        () => this.search(this.state.searchString));
+        this.setState(
+            {
+                searchType: type
+            },
+            () => this.search(this.state.searchString)
+        );
     }
 
     render(){
