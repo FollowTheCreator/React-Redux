@@ -56,10 +56,12 @@ class App extends React.Component {
     }
 
     handlePage(pageToken = ""){
-        this.setState({
-            pageToken: pageToken
-        },
-        () => this.searchByKeyword());
+        this.setState(
+            {
+                pageToken: pageToken
+            },
+            () => this.searchByKeyword()
+        );
     }
 
     render(){

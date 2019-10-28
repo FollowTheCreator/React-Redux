@@ -15,7 +15,7 @@ class Video extends React.Component{
                 <div className="card-body">
                     <img className="card-img-top" src={thisVideo.snippet.thumbnails.standard.url} alt=""/>
                     <p className="card-text">
-                        {Utils.cutString(thisVideo.snippet.description, DESCRIPTION_SIZE)}
+                        {Utils.truncate(thisVideo.snippet.description, DESCRIPTION_SIZE)}
                     </p>
                     <h5 className="card-title">
                         {thisVideo.snippet.channelTitle}

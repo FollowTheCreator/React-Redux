@@ -1,5 +1,5 @@
 class Utils{
-    static cutString(string, size){
+    static truncate(string, size){
         return string.length <= size ? string : string.slice(0, size) + "...";
     }
 }
