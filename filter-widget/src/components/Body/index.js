@@ -12,12 +12,19 @@ class Body extends React.Component{
         this.onContextClick = this.onContextClick.bind(this);
         this.onDimensionClick = this.onDimensionClick.bind(this);
         this.onRowClick = this.onRowClick.bind(this);
+        this.onSortClick = this.onSortClick.bind(this);
+        this.onSearchTypeClick = this.onSearchTypeClick.bind(this);
+        this.search = this.search.bind(this);
 
         this.state = {
+            sortAsc: true,
+            searchType: "_*_",
             searchString: "",
             contexts: [],
             dimensions: [],
-            cells: []
+            cells: [],
+            isSearching: false,
+            filteredCells: []
         }
     }
 
@@ -146,10 +153,19 @@ class Body extends React.Component{
                 return item;
             });
 
+            const sortedCells = [...this.state.cells, ...cells]
+                .sort(
+                    (cell1, cell2) => 
+                        cell1.element.innerText > cell2.element.innerText 
+                        ? this.state.sortAsc ? 1 : -1 
+                        : this.state.sortAsc ? -1 : 1
+                );
+
             this.setState({
-                cells: [...this.state.cells, ...cells],
+                cells: sortedCells,
                 dimensions
-            });
+            },
+            () => this.search(this.state.searchString));
         }
         else{
             const rows = this.state.cells;
@@ -174,10 +190,19 @@ class Body extends React.Component{
                 return item;
             });
 
+            const sortedCells = cells
+                .sort(
+                    (cell1, cell2) => 
+                        cell1.element.innerText > cell2.element.innerText 
+                        ? this.state.sortAsc ? 1 : -1 
+                        : this.state.sortAsc ? -1 : 1
+                );
+
             this.setState({
-                cells,
+                cells: sortedCells,
                 dimensions
-            });
+            },
+            () => this.search(this.state.searchString));
         }
     }
 
@@ -187,8 +212,58 @@ class Body extends React.Component{
 
     onSearchChange(value){
         this.setState({
+            isSearching: value === "" ? false : true,
             searchString: value
-        });
+        },
+        () => this.search(this.state.searchString));
+    }
+
+    search(value){
+        switch(this.state.searchType){
+            case "_*_":
+                this.setState({
+                    filteredCells: this.state.cells.filter(item => item.element.innerText.includes(value))
+                });
+                break;
+            case "*_":
+                this.setState({
+                    filteredCells: this.state.cells.filter(item => item.element.innerText.startsWith(value))
+                });
+                break;
+            case "*":
+                this.setState({
+                    filteredCells: this.state.cells.filter(item => item.element.innerText === value)
+                });
+                break;
+            default:
+                this.setState({
+                    filteredCells: this.state.cells
+                });
+        }
+    }
+
+    onSortClick(){
+        const sort = !this.state.sortAsc;
+
+        if(this.state.isSearching){
+            this.setState({
+                filteredCells: this.state.filteredCells.reverse(),
+                sortAsc: sort
+            });
+        }
+        else{
+            this.setState({
+                cells: this.state.cells.reverse(),
+                sortAsc: sort
+            });
+        }
+    }
+
+    onSearchTypeClick(type){
+        this.setState({
+            searchType: type
+        },
+        () => this.search(this.state.searchString));
     }
 
     render(){
@@ -204,9 +279,15 @@ class Body extends React.Component{
                     rows={this.state.dimensions}
                     onRowClick={this.onDimensionClick}
                 />
-                <Search onChange={this.onSearchChange}/>
+                <Search 
+                    onSearchChange={this.onSearchChange}
+                    onSortClick={this.onSortClick}
+                    sortAsc={this.state.sortAsc}
+                    searchType={this.state.searchType}
+                    onSearchTypeClick={this.onSearchTypeClick}
+                />
                 <Rows 
-                    rows={this.state.cells}
+                    rows={this.state.isSearching ? this.state.filteredCells : this.state.cells}
                     onRowClick={this.onRowClick}
                 />
             </div>

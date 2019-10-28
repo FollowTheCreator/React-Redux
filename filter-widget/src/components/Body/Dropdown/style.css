@@ -10,6 +10,11 @@
     letter-spacing: 2px;
     cursor: pointer;
     transition-duration: 0.2s;
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
 }
 .dropdown-btn:hover{
     background: rgba(255, 255, 255, 0.1);

@@ -31,14 +31,14 @@ class Dropdown extends React.Component{
 
         return(
             <div className="dropdown">
-                <div className="dropdown-btn" onClick={this.onClick}>
+                <button className="dropdown-btn" onClick={this.onClick}>
                     <p className="dropdown-btn__title">
                         {this.props.title}
                     </p>
                     <p className="dropdown-btn__selected">
                         {checkedRows}
                     </p>
-                </div>
+                </button>
                 <div
                     style={{
                         display: this.state.display
