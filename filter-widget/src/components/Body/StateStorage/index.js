@@ -18,10 +18,10 @@ class StateStorage extends React.Component{
                     {saveState}
                 </button>
                 <button 
-                    className="state-storage-btn state-storage__reset" 
-                    onClick={this.props.onResetClick}
+                    className="state-storage-btn state-storage__restore" 
+                    onClick={this.props.onRestoreClick}
                 >
-                        Reset state
+                        Restore state
                 </button>
             </div>
         );

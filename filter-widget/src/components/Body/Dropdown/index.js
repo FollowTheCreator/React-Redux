@@ -1,33 +1,65 @@
 import React from 'react';
 import './style.css';
 import Rows from '../Rows';
+import Utils from '../../../Services/Utils';
 
 class Dropdown extends React.Component{
     constructor(props){
         super(props);
 
         this.onClick = this.onClick.bind(this);
+        this.getCheckedRows = this.getCheckedRows.bind(this);
 
         this.state = {
             display: "none"
         }
     }
 
+    componentDidUpdate(){
+        const component = this.props.showingComponent;
+        if(this.props.canUpdate){
+            this.props.onDropdownClick(false, null);
+            this.setState(
+                {
+                    display: "none"
+                },
+                () => {
+                    if(component !== null){
+                        component.setState({
+                            display: "block"
+                        });
+                    }
+                }
+            );
+        }
+    }
+        
     onClick(){
         if(this.props.rows.length > 0){ 
-            this.setState({
-                display: this.state.display == "block" ? "none" : "block"
-            });
+            if(this.state.display !== "block"){
+                this.props.onDropdownClick(true, this);
+                this.setState({
+                    display: "block"
+                });
+            }
+            else{
+                this.setState({
+                    display: "none"
+                });
+            }
         }
     }
 
+    onContentClick(e){
+        e.stopPropagation();
+    }
+
+    getCheckedRows(){
+        return Utils.getRowsPreview(this.props.rows);
+    }
+
     render(){
-        const rows = this.props.rows
-            .filter(row => row.checked)
-            .map(row => row.element.id);
-        const checkedRows = rows.length > 5 ? 
-            rows.slice(0, 5).join(", ") + "..." :
-            rows.join(", ");
+        const checkedRows = this.getCheckedRows();
 
         return(
             <div className="dropdown">
@@ -44,6 +76,7 @@ class Dropdown extends React.Component{
                         display: this.state.display
                     }}
                     className="dropdown-content"
+                    onClick={this.onContentClick}
                 >
                     <Rows onRowClick={this.props.onRowClick} rows={this.props.rows} />
                 </div>

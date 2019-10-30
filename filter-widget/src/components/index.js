@@ -10,8 +10,12 @@ class App extends React.Component {
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
         this.onMouseDown = this.onMouseDown.bind(this);
+        this.onWidgetClick = this.onWidgetClick.bind(this);
+        this.onDropdownClick = this.onDropdownClick.bind(this);
 
         this.state = {
+            showingComponent: null,
+            canUpdate: true,
             x: 0,
             y: 0,
             prevX: 0,
@@ -56,6 +60,23 @@ class App extends React.Component {
         });
     }
 
+    onWidgetClick(){
+        this.setState(
+            {
+                canUpdate: true
+            }
+        );
+    }
+
+    onDropdownClick(canUpdate, showingComponent){
+        this.setState(
+            {
+                canUpdate,
+                showingComponent
+            }
+        );
+    }
+
     render(){
         const { y, x } = this.state;
 
@@ -66,12 +87,18 @@ class App extends React.Component {
                     left: `${x}px`
                 }}
                 className="filter-widget"
+                onClick={this.onWidgetClick}
             >
                 <Header 
                     title="FILTER WIDGET" 
                     onMouseDown={this.onMouseDown} 
                 />
-                <Body />
+                <Body 
+                    tables={this.props.tables}
+                    showingComponent={this.state.showingComponent}
+                    onDropdownClick={this.onDropdownClick}
+                    canUpdate={this.state.canUpdate}
+                />
             </div>
         );
     }
