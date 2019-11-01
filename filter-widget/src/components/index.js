@@ -2,6 +2,7 @@ import React from 'react';
 import './style.css';
 import Header from './Header';
 import Body from '../containers/Body';
+import PropTypes from 'prop-types';
 
 class App extends React.Component {
     constructor(props){
@@ -102,6 +103,10 @@ class App extends React.Component {
             </div>
         );
     }
+}
+
+App.propTypes = {
+    tables: PropTypes.array.isRequired
 }
 
 export default App;

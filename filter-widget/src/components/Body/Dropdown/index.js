@@ -2,6 +2,7 @@ import React from 'react';
 import './style.css';
 import Rows from '../Rows';
 import Utils from '../../../Services/Utils';
+import PropTypes from 'prop-types';
 
 class Dropdown extends React.Component{
     constructor(props){
@@ -83,6 +84,15 @@ class Dropdown extends React.Component{
             </div>
         );
     }
+}
+
+Dropdown.propTypes = {
+    canUpdate: PropTypes.bool.isRequired,
+    onDropdownClick: PropTypes.func.isRequired,
+    showingComponent: PropTypes.element.isRequired,
+    rows: PropTypes.array.isRequired,
+    title: PropTypes.string,
+    onRowClick: PropTypes.func.isRequired
 }
 
 export default Dropdown;

@@ -1,5 +1,6 @@
 import React from 'react';
 import './style.css';
+import PropTypes from 'prop-types';
 
 class SearchSort extends React.Component{
     constructor(props){
@@ -18,6 +19,11 @@ class SearchSort extends React.Component{
             </div>
         )
     }
+}
+
+SearchSort.propTypes = {
+    sortAsc: PropTypes.bool.isRequired,
+    onSortClick: PropTypes.func.isRequired
 }
 
 export default SearchSort;

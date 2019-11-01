@@ -1,5 +1,6 @@
 import React from 'react';
 import './style.css';
+import PropTypes from 'prop-types';
 
 class StateStorage extends React.Component{
     constructor(props){
@@ -26,6 +27,12 @@ class StateStorage extends React.Component{
             </div>
         );
     }
+}
+
+StateStorage.propTypes = {
+    stateSaved: PropTypes.bool.isRequired,
+    onSaveClick: PropTypes.func.isRequired,
+    onRestoreClick: PropTypes.func.isRequired
 }
 
 export default StateStorage;

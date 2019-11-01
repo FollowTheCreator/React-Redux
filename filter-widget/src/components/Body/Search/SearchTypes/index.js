@@ -1,5 +1,6 @@
 import React from 'react';
 import './style.css';
+import PropTypes from 'prop-types';
 
 class SearchTypes extends React.Component{
     constructor(props){
@@ -29,6 +30,12 @@ class SearchTypes extends React.Component{
             </div>
         )
     }
+}
+
+SearchTypes.propTypes = {
+    searchTypes: PropTypes.array.isRequired,
+    searchType: PropTypes.string.isRequired,
+    onSearchTypeClick: PropTypes.string.isRequired
 }
 
 export default SearchTypes;

@@ -1,5 +1,6 @@
 import React from 'react';
 import './style.css';
+import PropTypes from 'prop-types';
 
 class Header extends React.Component{
     constructor(props){
@@ -22,6 +23,11 @@ class Header extends React.Component{
             </div>
         );
     }
+}
+
+Header.propTypes = {
+    onMouseDown: PropTypes.func.isRequired,
+    title: PropTypes.string.isRequired
 }
 
 export default Header;

@@ -5,6 +5,7 @@ import Search from './Search';
 import Rows from './Rows';
 import StateStorage from './StateStorage';
 import Utils from '../../Services/Utils';
+import PropTypes from 'prop-types';
 
 class Body extends React.Component{
     constructor(props){
@@ -243,6 +244,22 @@ class Body extends React.Component{
             </div>
         );
     }
+}
+
+Body.propTypes = {
+    tables: PropTypes.array.isRequired,
+    contexts: PropTypes.array.isRequired,
+    dimensions: PropTypes.array.isRequired,
+    cells: PropTypes.array.isRequired,
+    filteredCells: PropTypes.array.isRequired,
+    addDimensions: PropTypes.func.isRequired,
+    setDimensions: PropTypes.func.isRequired,
+    setContexts: PropTypes.func.isRequired,
+    setCells: PropTypes.func.isRequired,
+    setFilteredCells: PropTypes.func.isRequired,
+    onDropdownClick: PropTypes.func.isRequired,
+    showingComponent: PropTypes.element.isRequired,
+    canUpdate: PropTypes.bool.isRequired
 }
 
 export default Body;

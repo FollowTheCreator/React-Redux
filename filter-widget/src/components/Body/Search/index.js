@@ -2,6 +2,7 @@ import React from 'react';
 import './style.css';
 import SearchTypes from './SearchTypes';
 import SearchSort from './SearchSort';
+import PropTypes from 'prop-types';
 
 class Search extends React.Component{
     constructor(props){
@@ -32,6 +33,15 @@ class Search extends React.Component{
             </div>
         );
     }
+}
+
+Search.propTypes = {
+    searchTypes: PropTypes.array.isRequired,
+    searchType: PropTypes.string.isRequired,
+    onSearchTypeClick: PropTypes.func.isRequired,
+    onSearchChange: PropTypes.func.isRequired,
+    onSortClick: PropTypes.func.isRequired,
+    sortAsc: PropTypes.bool.isRequired
 }
 
 export default Search;
