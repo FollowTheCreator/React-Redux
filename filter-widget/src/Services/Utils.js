@@ -153,6 +153,18 @@ class Utils{
             rows.slice(0, 5).join(", ") + "..." :
             rows.join(", ");
     }
+
+    static getSavedState(defaultSearchType){
+        const stateSaved = JSON.parse(localStorage.getItem("stateSaved"));
+        const searchType = localStorage.getItem("searchType") || defaultSearchType;
+        const sortAsc = JSON.parse(localStorage.getItem("sortAsc"));
+
+        return {
+            stateSaved,
+            searchType,
+            sortAsc
+        };
+    }
 }
 
 export default Utils;

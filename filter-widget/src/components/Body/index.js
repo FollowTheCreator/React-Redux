@@ -40,26 +40,23 @@ class Body extends React.Component{
             sortAsc: true,
             searchType: this.getDefaultSearchTypeValue(),
             searchString: "",
-            contexts: [],
-            dimensions: [],
-            cells: [],
             isSearching: false,
-            filteredCells: [],
             stateSaved: false
         }
     }
 
     componentDidMount(){
-        const stateSaved = JSON.parse(localStorage.getItem("stateSaved"));
-        const searchType = localStorage.getItem("searchType") || this.state.searchType;
-        const sortAsc = JSON.parse(localStorage.getItem("sortAsc"));
+        const savedState = Utils.getSavedState(this.getDefaultSearchTypeValue());
+        const stateSaved = savedState.stateSaved;
+        const searchType = savedState.searchType;
+        const sortAsc = savedState.sortAsc;
 
         const tables = this.props.tables;
         const contexts = Utils.getInitialContexts(tables);
+        this.props.setContexts(contexts);
 
         const sortAscResult = sortAsc !== null ? sortAsc : true;
         this.setState({
-            contexts,
             searchType: stateSaved === true ? searchType : this.state.searchType,
             sortAsc: stateSaved === true ? sortAscResult : this.state.sortAsc,
             stateSaved: stateSaved !== null ? stateSaved : false
@@ -76,66 +73,54 @@ class Body extends React.Component{
 
             const dimensions = Utils.getDimensions(headers, row);
 
-            const contexts = Utils.getNewContexts(this.state.contexts, row);
-    
-            this.setState(
-                {
-                    dimensions: [...this.state.dimensions, ...dimensions],
-                    contexts
-                },
-                () => this.search(this.state.searchString)
-            );
+            const contexts = Utils.getNewContexts(this.props.contexts, row);
+
+            this.props.setContexts(contexts);
+            this.props.addDimensions(dimensions);
+            
+            this.search(this.state.searchString);
         }
         else{
-            const dimensions = Utils.getCheckedDimensions(this.state.dimensions, row);
-            const cells = Utils.getContextsCells(this.state.dimensions, this.state.cells, row);
+            const dimensions = Utils.getCheckedDimensions(this.props.dimensions, row);
+            const cells = Utils.getContextsCells(this.props.dimensions, this.props.cells, row);
 
-            const contexts = Utils.getNewContexts(this.state.contexts, row);
+            const contexts = Utils.getNewContexts(this.props.contexts, row);
 
-            this.setState(
-                {
-                    dimensions,
-                    cells,
-                    contexts
-                },
-                () => this.search(this.state.searchString)
-            );
+            this.props.setContexts(contexts);
+            this.props.setDimensions(dimensions);
+            this.props.setCells(cells);
+
+            this.search(this.state.searchString);
         }
     }
 
     onDimensionClick(row, checked){
         if(checked){
-            const table = Utils.getDimensionTable(this.state.contexts, row);
+            const table = Utils.getDimensionTable(this.props.contexts, row);
             const rows = Array.from(table.rows);
 
             const cells = Utils.getDimensionsCells(rows, row, checked);
 
-            const dimensions = Utils.getNewDimensions(this.state.dimensions, row);
+            const dimensions = Utils.getNewDimensions(this.props.dimensions, row);
 
-            const sortedCells = Utils.getSortedCells(this.state.sortAsc, this.state.cells, cells);
+            const sortedCells = Utils.getSortedCells(this.state.sortAsc, this.props.cells, cells);
 
-            this.setState(
-                {
-                    cells: sortedCells,
-                    dimensions
-                },
-                () => this.search(this.state.searchString)
-            );
+            this.props.setDimensions(dimensions);
+            this.props.setCells(sortedCells);
+
+            this.search(this.state.searchString);
         }
         else{
-            const cells = Utils.getCheckedCells(this.state.cells, row);
+            const cells = Utils.getCheckedCells(this.props.cells, row);
 
-            const dimensions = Utils.getNewDimensions(this.state.dimensions, row);
+            const dimensions = Utils.getNewDimensions(this.props.dimensions, row);
 
             const sortedCells = Utils.getSortedCells(this.state.sortAsc, cells);
 
-            this.setState(
-                {
-                    cells: sortedCells,
-                    dimensions
-                },
-                () => this.search(this.state.searchString)
-            );
+            this.props.setDimensions(dimensions);
+            this.props.setCells(sortedCells);
+
+            this.search(this.state.searchString);
         }
     }
 
@@ -154,34 +139,31 @@ class Body extends React.Component{
     }
 
     search(value){
+        let filteredCells = this.props.cells;
         switch(this.state.searchType){
             case "_*_":
-                this.setState({
-                    filteredCells: this.state.cells.filter(item => item.element.innerText.includes(value))
-                });
+                filteredCells = this.props.cells.filter(item => item.element.innerText.includes(value));
+                this.props.setFilteredCells(filteredCells);
                 break;
             case "*_":
-                this.setState({
-                    filteredCells: this.state.cells.filter(item => item.element.innerText.startsWith(value))
-                });
+                filteredCells = this.props.cells.filter(item => item.element.innerText.startsWith(value));
+                this.props.setFilteredCells(filteredCells);
                 break;
             case "*":
-                this.setState({
-                    filteredCells: this.state.cells.filter(item => item.element.innerText === value)
-                });
+                filteredCells = this.props.cells.filter(item => item.element.innerText === value);
+                this.props.setFilteredCells(filteredCells);
                 break;
             default:
-                this.setState({
-                    filteredCells: this.state.cells
-                });
+                this.props.setFilteredCells(filteredCells);
         }
     }
 
     onSortClick(){
+        this.props.setCells(this.props.cells.reverse());
+        this.props.setFilteredCells(this.props.filteredCells.reverse());
+
         this.setState(
             {
-                cells: this.state.cells.reverse(),
-                filteredCells: this.state.filteredCells.reverse(),
                 sortAsc: !this.state.sortAsc,
                 stateSaved: false
             }
@@ -228,7 +210,7 @@ class Body extends React.Component{
                 <Dropdown 
                     onDropdownClick={this.props.onDropdownClick}
                     title="CONTEXTS"
-                    rows={this.state.contexts}
+                    rows={this.props.contexts}
                     onRowClick={this.onContextClick}
                     showingComponent={this.props.showingComponent}
                     canUpdate={this.props.canUpdate}
@@ -236,7 +218,7 @@ class Body extends React.Component{
                 <Dropdown 
                     onDropdownClick={this.props.onDropdownClick}
                     title="DIMENSIONS"
-                    rows={this.state.dimensions}
+                    rows={this.props.dimensions}
                     onRowClick={this.onDimensionClick}
                     showingComponent={this.props.showingComponent}
                     canUpdate={this.props.canUpdate}
@@ -250,7 +232,7 @@ class Body extends React.Component{
                     searchTypes={this.searchTypes}
                 />
                 <Rows 
-                    rows={this.state.isSearching ? this.state.filteredCells : this.state.cells}
+                    rows={this.state.isSearching ? this.props.filteredCells : this.props.cells}
                     onRowClick={this.onRowClick}
                 />
                 <StateStorage 

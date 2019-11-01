@@ -1,7 +1,7 @@
 import React from 'react';
 import './style.css';
 import Header from './Header';
-import Body from './Body';
+import Body from '../containers/Body';
 
 class App extends React.Component {
     constructor(props){
