@@ -38,4 +38,13 @@ Search.propTypes = {
     sortAsc: PropTypes.bool.isRequired
 }
 
+Search.defaultProps = {
+    searchTypes: [],
+    searchType: "_*_",
+    onSearchTypeClick: () => {},
+    onSearchChange: () => {},
+    onSortClick: () => {},
+    sortAsc: true
+}
+
 export default Search;

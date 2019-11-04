@@ -48,12 +48,12 @@ class Utils{
     }
 
     static getCheckedDimensions(headers = [], row = {}){
-        const dimensions = [];
-
-        headers.map(header => {
+        const dimensions = headers.filter(header => {
             if(header.parent.element.id !== row.element.id){
-                dimensions.push(header);
+                return true;
             }
+
+            return false;
         });
 
         return dimensions;
@@ -88,9 +88,9 @@ class Utils{
     static getContextsCells(headers = [], rows = [], row = {}){
         const cells = [];
 
-        headers.map(header => {
+        headers.forEach(header => {
             if(header.parent.element.id === row.element.id){
-                rows.map(item => {
+                rows.forEach(item => {
                     if(item.parent.parent.element.id !== header.parent.element.id){
                         if(!cells.includes(item)){
                             cells.push(item);
@@ -106,7 +106,7 @@ class Utils{
     static getDimensionsCells(rows = [], row = {}, checked = false){
         const cells = [];
 
-        rows.map((item, index) => {
+        rows.forEach((item, index) => {
             if(index > 0){
                 const cell = item.cells[row.index];
                 cell.id = cell.innerText;
@@ -135,12 +135,12 @@ class Utils{
     }
 
     static getCheckedCells(rows = [], row = {}){
-        const cells = [];
-
-        rows.map(item => {
+        const cells = rows.filter(item => {
             if(item.parent.element.id !== row.element.id){
-                cells.push(item);
+                return true;
             }
+
+            return false;
         });
 
         return cells;

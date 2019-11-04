@@ -4,7 +4,7 @@ import Header from './Header';
 import Body from '../containers/Body';
 import PropTypes from 'prop-types';
 
-class App extends React.Component {
+class App extends React.PureComponent {
     constructor(props){
         super(props);
 
@@ -99,6 +99,10 @@ class App extends React.Component {
 
 App.propTypes = {
     tables: PropTypes.array.isRequired
+}
+
+App.defaultProps = {
+    tables: []
 }
 
 export default App;

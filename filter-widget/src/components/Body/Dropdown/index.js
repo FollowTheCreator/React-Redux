@@ -4,7 +4,7 @@ import Rows from '../Rows';
 import Utils from '../../../Services/Utils';
 import PropTypes from 'prop-types';
 
-class Dropdown extends React.Component{
+class Dropdown extends React.PureComponent{
     constructor(props){
         super(props);
 
@@ -93,6 +93,15 @@ Dropdown.propTypes = {
     rows: PropTypes.array.isRequired,
     title: PropTypes.string,
     onRowClick: PropTypes.func.isRequired
+}
+
+Dropdown.defaultProps = {
+    canUpdate: true,
+    showingComponent: null,
+    rows: [],
+    title: "",
+    onDropdownClick: () => {},
+    onRowClick: () => {}
 }
 
 export default Dropdown;

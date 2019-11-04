@@ -29,4 +29,10 @@ SearchTypes.propTypes = {
     onSearchTypeClick: PropTypes.func.isRequired
 }
 
+SearchTypes.defaultProps = {
+    searchTypes: [],
+    searchType: "_*_",
+    onSearchTypeClick: () => {}
+}
+
 export default SearchTypes;

@@ -7,7 +7,7 @@ import StateStorage from './StateStorage';
 import Utils from '../../Services/Utils';
 import PropTypes from 'prop-types';
 
-class Body extends React.Component{
+class Body extends React.PureComponent{
     constructor(props){
         super(props);
 
@@ -260,6 +260,22 @@ Body.propTypes = {
     onDropdownClick: PropTypes.func.isRequired,
     showingComponent: PropTypes.object,
     canUpdate: PropTypes.bool.isRequired
+}
+
+Body.defaultProps = {
+    tables: [],
+    contexts: [],
+    dimensions: [],
+    cells: [],
+    filteredCells: [],
+    addDimensions: () => {},
+    setDimensions: () => {},
+    setContexts: () => {},
+    setCells: () => {},
+    setFilteredCells: () => {},
+    onDropdownClick: () => {},
+    showingComponent: {},
+    canUpdate: true
 }
 
 export default Body;

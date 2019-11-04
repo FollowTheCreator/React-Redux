@@ -27,4 +27,10 @@ StateStorage.propTypes = {
     onRestoreClick: PropTypes.func.isRequired
 }
 
+StateStorage.defaultProps = {
+    stateSaved: false,
+    onSaveClick: () => {},
+    onRestoreClick: () => {}
+}
+
 export default StateStorage;

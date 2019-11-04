@@ -2,7 +2,7 @@ import React from 'react';
 import './style.css';
 import PropTypes from 'prop-types';
 
-class Row extends React.Component{
+class Row extends React.PureComponent{
     constructor(props){
         super(props);
 
@@ -41,6 +41,11 @@ class Row extends React.Component{
 Row.propTypes = {
     onRowClick: PropTypes.func.isRequired,
     row: PropTypes.object.isRequired
+}
+
+Row.defaultProps = {
+    row: {},
+    onRowClick: () => {}
 }
 
 export default Row;

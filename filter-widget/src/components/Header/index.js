@@ -18,4 +18,9 @@ Header.propTypes = {
     title: PropTypes.string.isRequired
 }
 
+Header.defaultProps = {
+    onMouseDown: () => {},
+    title: ""
+}
+
 export default Header;

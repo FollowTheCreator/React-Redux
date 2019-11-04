@@ -18,4 +18,9 @@ SearchSort.propTypes = {
     onSortClick: PropTypes.func.isRequired
 }
 
+SearchSort.defaultProps = {
+    sortAsc: true,
+    onSortClick: () => {}
+}
+
 export default SearchSort;

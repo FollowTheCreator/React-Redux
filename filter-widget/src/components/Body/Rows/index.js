@@ -20,4 +20,9 @@ Rows.propTypes = {
     onRowClick: PropTypes.func.isRequired
 }
 
+Rows.defaultProps = {
+    rows: [],
+    onRowClick: () => {}
+}
+
 export default Rows;
