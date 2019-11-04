@@ -1,5 +1,5 @@
 const contexts = (state = [], action) => {
-    switch(action.type){
+    switch (action.type) {
         case "SET_CONTEXTS":
             return (
                 action.payload

@@ -3,9 +3,9 @@ import './style.css';
 import PropTypes from 'prop-types';
 
 const SearchSort = (props) => {
-    return(
-        <div 
-            className="search-settings-filter search-settings__sort" 
+    return (
+        <div
+            className="search-settings-filter search-settings__sort"
             onClick={props.onSortClick}
         >
             {props.sortAsc ? "A-Z" : "Z-A"}
@@ -20,7 +20,7 @@ SearchSort.propTypes = {
 
 SearchSort.defaultProps = {
     sortAsc: true,
-    onSortClick: () => {}
+    onSortClick: () => { }
 }
 
 export default SearchSort;

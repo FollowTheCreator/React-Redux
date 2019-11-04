@@ -1,7 +1,7 @@
 import React from 'react';
 import './style.css';
-import SearchTypes from './SearchTypes';
-import SearchSort from './SearchSort';
+import SearchTypes from '../FilterWidgetSearchTypes';
+import SearchSort from '../FilterWidgetSearchSort';
 import PropTypes from 'prop-types';
 
 const Search = (props) => {
@@ -13,14 +13,14 @@ const Search = (props) => {
 
     return (
         <div className="search">
-            <input ref={inputRef} onChange={onChange} className="search__input" placeholder="Search..." autoComplete="off"/>
+            <input ref={inputRef} onChange={onChange} className="search__input" placeholder="Search..." autoComplete="off" />
             <div className="search-settings">
-                <SearchTypes 
-                    searchTypes={props.searchTypes} 
-                    searchType={props.searchType} 
+                <SearchTypes
+                    searchTypes={props.searchTypes}
+                    searchType={props.searchType}
                     onSearchTypeClick={props.onSearchTypeClick}
                 />
-                <SearchSort 
+                <SearchSort
                     sortAsc={props.sortAsc}
                     onSortClick={props.onSortClick}
                 />
@@ -41,9 +41,9 @@ Search.propTypes = {
 Search.defaultProps = {
     searchTypes: [],
     searchType: "_*_",
-    onSearchTypeClick: () => {},
-    onSearchChange: () => {},
-    onSortClick: () => {},
+    onSearchTypeClick: () => { },
+    onSearchChange: () => { },
+    onSortClick: () => { },
     sortAsc: true
 }
 

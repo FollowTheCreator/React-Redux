@@ -3,9 +3,9 @@ import './style.css';
 import PropTypes from 'prop-types';
 
 const Header = (props) => {
-    return(
-        <div 
-            className="drag-hook" 
+    return (
+        <div
+            className="drag-hook"
             onMouseDown={(e) => props.onMouseDown(e)}
         >
             {props.title}
@@ -19,7 +19,7 @@ Header.propTypes = {
 }
 
 Header.defaultProps = {
-    onMouseDown: () => {},
+    onMouseDown: () => { },
     title: ""
 }
 

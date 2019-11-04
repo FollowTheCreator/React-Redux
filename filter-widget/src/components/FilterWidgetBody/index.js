@@ -1,14 +1,17 @@
 import React from 'react';
 import './style.css';
-import Dropdown from './Dropdown';
-import Search from './Search';
-import Rows from './Rows';
-import StateStorage from './StateStorage';
-import Utils from '../../Services/Utils';
+import Dropdown from '../FilterWidgetDropdown';
+import Search from '../FilterWidgetSearch';
+import Rows from '../FilterWidgetRows';
+import StateStorage from '../FilterWidgetStateStorage';
+import Utils from '../../Utils';
+import CellsService from '../../Services/CellsService';
+import DimensionsService from '../../Services/DimensionsService';
+import ContextsService from '../../Services/ContextsService';
 import PropTypes from 'prop-types';
 
-class Body extends React.PureComponent{
-    constructor(props){
+class Body extends React.PureComponent {
+    constructor(props) {
         super(props);
 
         this.onSearchChange = this.onSearchChange.bind(this);
@@ -46,14 +49,14 @@ class Body extends React.PureComponent{
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         const savedState = Utils.getSavedState(this.getDefaultSearchTypeValue());
         const stateSaved = savedState.stateSaved;
         const searchType = savedState.searchType;
         const sortAsc = savedState.sortAsc;
 
         const tables = this.props.tables;
-        const contexts = Utils.getInitialContexts(tables);
+        const contexts = ContextsService.getInitialContexts(tables);
         this.props.setContexts(contexts);
 
         const sortAscResult = sortAsc !== null ? sortAsc : true;
@@ -64,28 +67,28 @@ class Body extends React.PureComponent{
         });
     }
 
-    getDefaultSearchTypeValue(){
+    getDefaultSearchTypeValue() {
         return this.searchTypes.find(type => type.isDefault).value;
     }
 
-    onContextClick(row, checked){
-        if(checked){
+    onContextClick(row, checked) {
+        if (checked) {
             const headers = row.element.getElementsByTagName("th");
 
-            const dimensions = Utils.getDimensions(headers, row);
+            const dimensions = DimensionsService.getDimensions(headers, row);
 
-            const contexts = Utils.getNewContexts(this.props.contexts, row);
+            const contexts = ContextsService.getNewContexts(this.props.contexts, row);
 
             this.props.setContexts(contexts);
             this.props.addDimensions(dimensions);
-            
+
             this.search(this.state.searchString);
         }
-        else{
-            const dimensions = Utils.getCheckedDimensions(this.props.dimensions, row);
-            const cells = Utils.getContextsCells(this.props.dimensions, this.props.cells, row);
+        else {
+            const dimensions = DimensionsService.getCheckedDimensions(this.props.dimensions, row);
+            const cells = CellsService.getContextsCells(this.props.dimensions, this.props.cells, row);
 
-            const contexts = Utils.getNewContexts(this.props.contexts, row);
+            const contexts = ContextsService.getNewContexts(this.props.contexts, row);
 
             this.props.setContexts(contexts);
             this.props.setDimensions(dimensions);
@@ -95,28 +98,28 @@ class Body extends React.PureComponent{
         }
     }
 
-    onDimensionClick(row, checked){
-        if(checked){
-            const table = Utils.getDimensionTable(this.props.contexts, row);
+    onDimensionClick(row, checked) {
+        if (checked) {
+            const table = DimensionsService.getDimensionTable(this.props.contexts, row);
             const rows = Array.from(table.rows);
 
-            const cells = Utils.getDimensionsCells(rows, row, checked);
+            const cells = CellsService.getDimensionsCells(rows, row, checked);
 
-            const dimensions = Utils.getNewDimensions(this.props.dimensions, row);
+            const dimensions = DimensionsService.getNewDimensions(this.props.dimensions, row);
 
-            const sortedCells = Utils.getSortedCells(this.state.sortAsc, this.props.cells, cells);
+            const sortedCells = CellsService.getSortedCells(this.state.sortAsc, this.props.cells, cells);
 
             this.props.setDimensions(dimensions);
             this.props.setCells(sortedCells);
 
             this.search(this.state.searchString);
         }
-        else{
-            const cells = Utils.getCheckedCells(this.props.cells, row);
+        else {
+            const cells = CellsService.getCheckedCells(this.props.cells, row);
 
-            const dimensions = Utils.getNewDimensions(this.props.dimensions, row);
+            const dimensions = DimensionsService.getNewDimensions(this.props.dimensions, row);
 
-            const sortedCells = Utils.getSortedCells(this.state.sortAsc, cells);
+            const sortedCells = CellsService.getSortedCells(this.state.sortAsc, cells);
 
             this.props.setDimensions(dimensions);
             this.props.setCells(sortedCells);
@@ -125,11 +128,11 @@ class Body extends React.PureComponent{
         }
     }
 
-    onRowClick(){
+    onRowClick() {
 
     }
 
-    onSearchChange(value){
+    onSearchChange(value) {
         this.setState(
             {
                 isSearching: value === "" ? false : true,
@@ -139,9 +142,9 @@ class Body extends React.PureComponent{
         );
     }
 
-    search(value){
+    search(value) {
         let filteredCells = this.props.cells;
-        switch(this.state.searchType){
+        switch (this.state.searchType) {
             case "_*_":
                 filteredCells = this.props.cells.filter(item => item.element.innerText.includes(value));
                 this.props.setFilteredCells(filteredCells);
@@ -159,7 +162,7 @@ class Body extends React.PureComponent{
         }
     }
 
-    onSortClick(){
+    onSortClick() {
         this.props.setCells(this.props.cells.reverse());
         this.props.setFilteredCells(this.props.filteredCells.reverse());
 
@@ -171,7 +174,7 @@ class Body extends React.PureComponent{
         );
     }
 
-    onSearchTypeClick(type){
+    onSearchTypeClick(type) {
         this.setState(
             {
                 searchType: type,
@@ -181,7 +184,7 @@ class Body extends React.PureComponent{
         );
     }
 
-    onSaveClick(){
+    onSaveClick() {
         this.setState(
             {
                 stateSaved: !this.state.stateSaved
@@ -194,7 +197,7 @@ class Body extends React.PureComponent{
         );
     }
 
-    onRestoreClick(){
+    onRestoreClick() {
         this.setState(
             {
                 stateSaved: false,
@@ -203,12 +206,12 @@ class Body extends React.PureComponent{
             },
             () => localStorage.setItem("stateSaved", false)
         );
-    }   
+    }
 
-    render(){
-        return(
+    render() {
+        return (
             <div className="body">
-                <Dropdown 
+                <Dropdown
                     onDropdownClick={this.props.onDropdownClick}
                     title="CONTEXTS"
                     rows={this.props.contexts}
@@ -216,7 +219,7 @@ class Body extends React.PureComponent{
                     showingComponent={this.props.showingComponent}
                     canUpdate={this.props.canUpdate}
                 />
-                <Dropdown 
+                <Dropdown
                     onDropdownClick={this.props.onDropdownClick}
                     title="DIMENSIONS"
                     rows={this.props.dimensions}
@@ -224,7 +227,7 @@ class Body extends React.PureComponent{
                     showingComponent={this.props.showingComponent}
                     canUpdate={this.props.canUpdate}
                 />
-                <Search 
+                <Search
                     onSearchChange={this.onSearchChange}
                     onSortClick={this.onSortClick}
                     sortAsc={this.state.sortAsc}
@@ -232,13 +235,13 @@ class Body extends React.PureComponent{
                     onSearchTypeClick={this.onSearchTypeClick}
                     searchTypes={this.searchTypes}
                 />
-                <Rows 
+                <Rows
                     rows={this.state.isSearching ? this.props.filteredCells : this.props.cells}
                     onRowClick={this.onRowClick}
                 />
-                <StateStorage 
-                    onSaveClick={this.onSaveClick} 
-                    onRestoreClick={this.onRestoreClick} 
+                <StateStorage
+                    onSaveClick={this.onSaveClick}
+                    onRestoreClick={this.onRestoreClick}
                     stateSaved={this.state.stateSaved}
                 />
             </div>
@@ -268,12 +271,12 @@ Body.defaultProps = {
     dimensions: [],
     cells: [],
     filteredCells: [],
-    addDimensions: () => {},
-    setDimensions: () => {},
-    setContexts: () => {},
-    setCells: () => {},
-    setFilteredCells: () => {},
-    onDropdownClick: () => {},
+    addDimensions: () => { },
+    setDimensions: () => { },
+    setContexts: () => { },
+    setCells: () => { },
+    setFilteredCells: () => { },
+    onDropdownClick: () => { },
     showingComponent: {},
     canUpdate: true
 }

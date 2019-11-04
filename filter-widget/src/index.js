@@ -1,8 +1,8 @@
-import React from  'react' ;
+import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './containers/App';
-import {Provider} from 'react-redux';
-import {createStore} from 'redux';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 import rootReducer from './reducers/index';
 
 const tables = document.getElementsByTagName("table");
@@ -11,7 +11,7 @@ const store = createStore(rootReducer);
 
 ReactDOM.render(
     <Provider store={store}>
-        <App tables={tables}/>
-    </Provider>, 
+        <App tables={tables} />
+    </Provider>,
     document.getElementById('root')
 );

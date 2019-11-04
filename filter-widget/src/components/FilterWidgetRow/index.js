@@ -2,18 +2,18 @@ import React from 'react';
 import './style.css';
 import PropTypes from 'prop-types';
 
-class Row extends React.PureComponent{
-    constructor(props){
+class Row extends React.PureComponent {
+    constructor(props) {
         super(props);
 
-        this.state={
+        this.state = {
             checked: false
         }
 
         this.onClick = this.onClick.bind(this);
     }
 
-    onClick(){
+    onClick() {
         const checked = !this.state.checked;
         this.setState({
             checked: checked
@@ -21,13 +21,13 @@ class Row extends React.PureComponent{
         this.props.onRowClick(this.props.row, checked);
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <label className="row" onClick={this.onClick}>
                 <div className="row-checkbox">
-                    <div 
-                        className="row-checkbox__mark" 
-                        style={{display: this.state.checked ? "block" : "none"}}
+                    <div
+                        className="row-checkbox__mark"
+                        style={{ display: this.state.checked ? "block" : "none" }}
                     ></div>
                 </div>
                 <span className="row__title">
@@ -45,7 +45,7 @@ Row.propTypes = {
 
 Row.defaultProps = {
     row: {},
-    onRowClick: () => {}
+    onRowClick: () => { }
 }
 
 export default Row;

@@ -29,8 +29,8 @@ StateStorage.propTypes = {
 
 StateStorage.defaultProps = {
     stateSaved: false,
-    onSaveClick: () => {},
-    onRestoreClick: () => {}
+    onSaveClick: () => { },
+    onRestoreClick: () => { }
 }
 
 export default StateStorage;

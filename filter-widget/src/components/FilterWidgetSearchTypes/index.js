@@ -32,7 +32,7 @@ SearchTypes.propTypes = {
 SearchTypes.defaultProps = {
     searchTypes: [],
     searchType: "_*_",
-    onSearchTypeClick: () => {}
+    onSearchTypeClick: () => { }
 }
 
 export default SearchTypes;

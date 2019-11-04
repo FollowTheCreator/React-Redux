@@ -1,5 +1,5 @@
 const cells = (state = [], action) => {
-    switch(action.type){
+    switch (action.type) {
         case "SET_CELLS":
             return (
                 action.payload

@@ -1,6 +1,6 @@
 import React from 'react';
 import './style.css';
-import Header from './Header';
+import Header from './FilterWidgetHeader';
 import Body from '../containers/Body';
 import PropTypes from 'prop-types';
 

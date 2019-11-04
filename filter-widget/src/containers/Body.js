@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
-import Body from '../components/Body';
-import { 
-    setContexts, 
-    setDimensions, 
+import Body from '../components/FilterWidgetBody';
+import {
+    setContexts,
+    setDimensions,
     addDimensions,
     setCells,
     setFilteredCells

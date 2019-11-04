@@ -1,4 +1,4 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 import tables from './tables';
 import contexts from './contexts';
 import dimensions from './dimensions';

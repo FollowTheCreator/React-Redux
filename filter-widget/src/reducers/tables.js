@@ -1,5 +1,5 @@
 const tables = (state = [], action) => {
-    switch(action.type){
+    switch (action.type) {
         default:
             return state;
     }
