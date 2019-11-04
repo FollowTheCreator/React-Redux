@@ -2,31 +2,23 @@ import React from 'react';
 import './style.css';
 import PropTypes from 'prop-types';
 
-class StateStorage extends React.Component{
-    constructor(props){
-        super(props);
-    }
-
-    render(){
-        const saveState = this.props.stateSaved ? "State saved" : "Save state";
-
-        return(
-            <div className="state-storage">
-                <button 
-                    className="state-storage-btn state-storage__save-state" 
-                    onClick={this.props.onSaveClick}
-                >
-                    {saveState}
-                </button>
-                <button 
-                    className="state-storage-btn state-storage__restore" 
-                    onClick={this.props.onRestoreClick}
-                >
-                        Restore state
-                </button>
-            </div>
-        );
-    }
+const StateStorage = (props) => {
+    return (
+        <div className="state-storage">
+            <button
+                className="state-storage-btn state-storage__save-state"
+                onClick={props.onSaveClick}
+            >
+                {props.stateSaved ? "State saved" : "Save state"}
+            </button>
+            <button
+                className="state-storage-btn state-storage__restore"
+                onClick={props.onRestoreClick}
+            >
+                Restore state
+            </button>
+        </div>
+    );
 }
 
 StateStorage.propTypes = {

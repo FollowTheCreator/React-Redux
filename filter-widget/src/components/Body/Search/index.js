@@ -4,35 +4,29 @@ import SearchTypes from './SearchTypes';
 import SearchSort from './SearchSort';
 import PropTypes from 'prop-types';
 
-class Search extends React.Component{
-    constructor(props){
-        super(props);
+const Search = (props) => {
+    let inputRef = React.createRef();
 
-        this.onChange = this.onChange.bind(this);
+    const onChange = () => {
+        props.onSearchChange(inputRef.current.value);
     }
 
-    onChange(e){
-        this.props.onSearchChange(e.target.value);
-    }
-
-    render(){
-        return(
-            <div className="search">
-                <input onChange={this.onChange} className="search__input" placeholder="Search..." autoComplete="off"/>
-                <div className="search-settings">
-                    <SearchTypes 
-                        searchTypes={this.props.searchTypes} 
-                        searchType={this.props.searchType} 
-                        onSearchTypeClick={this.props.onSearchTypeClick}
-                    />
-                    <SearchSort 
-                        sortAsc={this.props.sortAsc}
-                        onSortClick={this.props.onSortClick}
-                    />
-                </div>
+    return (
+        <div className="search">
+            <input ref={inputRef} onChange={onChange} className="search__input" placeholder="Search..." autoComplete="off"/>
+            <div className="search-settings">
+                <SearchTypes 
+                    searchTypes={props.searchTypes} 
+                    searchType={props.searchType} 
+                    onSearchTypeClick={props.onSearchTypeClick}
+                />
+                <SearchSort 
+                    sortAsc={props.sortAsc}
+                    onSortClick={props.onSortClick}
+                />
             </div>
-        );
-    }
+        </div>
+    );
 }
 
 Search.propTypes = {

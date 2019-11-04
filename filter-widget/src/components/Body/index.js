@@ -258,7 +258,7 @@ Body.propTypes = {
     setCells: PropTypes.func.isRequired,
     setFilteredCells: PropTypes.func.isRequired,
     onDropdownClick: PropTypes.func.isRequired,
-    showingComponent: PropTypes.element,
+    showingComponent: PropTypes.object,
     canUpdate: PropTypes.bool.isRequired
 }
 

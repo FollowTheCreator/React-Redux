@@ -2,27 +2,15 @@ import React from 'react';
 import './style.css';
 import PropTypes from 'prop-types';
 
-class Header extends React.Component{
-    constructor(props){
-        super(props);
-
-        this.onMouseDown = this.onMouseDown.bind(this);
-    }
-
-    onMouseDown(e){
-        this.props.onMouseDown(e);
-    }
-
-    render(){
-        return(
-            <div 
-                className="drag-hook" 
-                onMouseDown={this.onMouseDown}
-            >
-                {this.props.title}
-            </div>
-        );
-    }
+const Header = (props) => {
+    return(
+        <div 
+            className="drag-hook" 
+            onMouseDown={(e) => props.onMouseDown(e)}
+        >
+            {props.title}
+        </div>
+    );
 }
 
 Header.propTypes = {
