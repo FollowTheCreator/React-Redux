@@ -135,7 +135,7 @@ class Body extends React.Component{
                 isSearching: value === "" ? false : true,
                 searchString: value
             },
-            () => this.search(this.state.searchString)
+            () => this.search(value)
         );
     }
 
@@ -258,7 +258,7 @@ Body.propTypes = {
     setCells: PropTypes.func.isRequired,
     setFilteredCells: PropTypes.func.isRequired,
     onDropdownClick: PropTypes.func.isRequired,
-    showingComponent: PropTypes.element.isRequired,
+    showingComponent: PropTypes.element,
     canUpdate: PropTypes.bool.isRequired
 }
 

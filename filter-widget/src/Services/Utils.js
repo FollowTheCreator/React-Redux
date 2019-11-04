@@ -1,3 +1,5 @@
+const MAX_ROW_PREVIEWS = 5;
+
 class Utils{
     static getInitialContexts(tables = []){
         const contexts = [];
@@ -149,8 +151,8 @@ class Utils{
             .filter(row => row.checked)
             .map(row => row.element.id);
 
-        return rows.length > 5 ? 
-            rows.slice(0, 5).join(", ") + "..." :
+        return rows.length > MAX_ROW_PREVIEWS ? 
+            rows.slice(0, MAX_ROW_PREVIEWS).join(", ") + "..." :
             rows.join(", ");
     }
 

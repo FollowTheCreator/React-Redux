@@ -35,7 +35,7 @@ class SearchTypes extends React.Component{
 SearchTypes.propTypes = {
     searchTypes: PropTypes.array.isRequired,
     searchType: PropTypes.string.isRequired,
-    onSearchTypeClick: PropTypes.string.isRequired
+    onSearchTypeClick: PropTypes.func.isRequired
 }
 
 export default SearchTypes;

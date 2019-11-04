@@ -3,25 +3,16 @@ import './style.css';
 import Row from './Row';
 import PropTypes from 'prop-types';
 
-class Rows extends React.Component{
-    constructor(props){
-        super(props);
-    }
-
-    render(){
-        const rows = 
+const Rows = (props) => {
+    return (
         <ul className="rows">
-            {this.props.rows.map(row => 
+            {props.rows.map(row => 
                 <li key={row.element.id}>
-                    <Row onRowClick={this.props.onRowClick} row={row} />
+                    <Row onRowClick={props.onRowClick} row={row} />
                 </li>
             )}
-        </ul>;
-
-        return(
-            rows
-        );
-    }
+        </ul>
+    );
 }
 
 Rows.propTypes = {

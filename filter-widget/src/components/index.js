@@ -20,25 +20,22 @@ class App extends React.Component {
             x: 0,
             y: 0,
             prevX: 0,
-            prevY: 0,
-            isMouseDown: false
+            prevY: 0
         }
     }
 
     onMouseMove(e){
         e.preventDefault();
         
-        if (this.state.isMouseDown) {
-            const xShift = this.state.prevX - e.clientX;
-            const yShift = this.state.prevY - e.clientY;
+        const xShift = this.state.prevX - e.clientX;
+        const yShift = this.state.prevY - e.clientY;
 
-            this.setState({
-                x: this.state.x - xShift,
-                y: this.state.y - yShift,
-                prevX: e.clientX,
-                prevY: e.clientY
-            });
-        }
+        this.setState({
+            x: this.state.x - xShift,
+            y: this.state.y - yShift,
+            prevX: e.clientX,
+            prevY: e.clientY
+        });
     }
 
     onMouseDown(e){
@@ -47,18 +44,13 @@ class App extends React.Component {
 
         this.setState({
             prevX: e.clientX,
-            prevY: e.clientY,
-            isMouseDown: true
+            prevY: e.clientY
         });
     }
 
     onMouseUp(){
         document.removeEventListener('mousemove', this.onMouseMove);
         document.removeEventListener('mouseup', this.onMouseUp);
-
-        this.setState({
-            isMouseDown: false
-        });
     }
 
     onWidgetClick(){

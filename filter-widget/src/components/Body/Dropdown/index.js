@@ -89,7 +89,7 @@ class Dropdown extends React.Component{
 Dropdown.propTypes = {
     canUpdate: PropTypes.bool.isRequired,
     onDropdownClick: PropTypes.func.isRequired,
-    showingComponent: PropTypes.element.isRequired,
+    showingComponent: PropTypes.element,
     rows: PropTypes.array.isRequired,
     title: PropTypes.string,
     onRowClick: PropTypes.func.isRequired

@@ -14,12 +14,11 @@ class Row extends React.Component{
     }
 
     onClick(){
+        const checked = !this.state.checked;
         this.setState({
-            checked: !this.state.checked
-        },
-        () => {
-            this.props.onRowClick(this.props.row, this.state.checked);
+            checked: checked
         });
+        this.props.onRowClick(this.props.row, checked);
     }
 
     render(){
