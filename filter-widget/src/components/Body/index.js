@@ -50,9 +50,10 @@ class Body extends React.Component{
     }
 
     componentDidMount(){
-        const stateSaved = JSON.parse(localStorage.getItem("stateSaved"));
-        const searchType = localStorage.getItem("searchType") || this.state.searchType;
-        const sortAsc = JSON.parse(localStorage.getItem("sortAsc"));
+        const savedState = Utils.getSavedState(this.getDefaultSearchTypeValue());
+        const stateSaved = savedState.stateSaved;
+        const searchType = savedState.searchType;
+        const sortAsc = savedState.sortAsc;
 
         const tables = this.props.tables;
         const contexts = Utils.getInitialContexts(tables);
