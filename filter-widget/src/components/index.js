@@ -1,10 +1,11 @@
 import React from 'react';
 import './style.css';
-import Header from './Header';
-import Body from './Body';
+import Header from './FilterWidgetHeader';
+import Body from './FilterWidgetBody';
+import PropTypes from 'prop-types';
 
-class App extends React.Component {
-    constructor(props){
+class App extends React.PureComponent {
+    constructor(props) {
         super(props);
 
         this.onMouseMove = this.onMouseMove.bind(this);
@@ -19,28 +20,25 @@ class App extends React.Component {
             x: 0,
             y: 0,
             prevX: 0,
-            prevY: 0,
-            isMouseDown: false
+            prevY: 0
         }
     }
 
-    onMouseMove(e){
+    onMouseMove(e) {
         e.preventDefault();
-        
-        if (this.state.isMouseDown) {
-            const xShift = this.state.prevX - e.clientX;
-            const yShift = this.state.prevY - e.clientY;
 
-            this.setState({
-                x: this.state.x - xShift,
-                y: this.state.y - yShift,
-                prevX: e.clientX,
-                prevY: e.clientY
-            });
-        }
+        const xShift = this.state.prevX - e.clientX;
+        const yShift = this.state.prevY - e.clientY;
+
+        this.setState({
+            x: this.state.x - xShift,
+            y: this.state.y - yShift,
+            prevX: e.clientX,
+            prevY: e.clientY
+        });
     }
 
-    onMouseDown(e){
+    onMouseDown(e) {
         document.addEventListener('mousemove', this.onMouseMove);
         document.addEventListener('mouseup', this.onMouseUp);
 
@@ -51,16 +49,12 @@ class App extends React.Component {
         });
     }
 
-    onMouseUp(){
+    onMouseUp() {
         document.removeEventListener('mousemove', this.onMouseMove);
         document.removeEventListener('mouseup', this.onMouseUp);
-
-        this.setState({
-            isMouseDown: false
-        });
     }
 
-    onWidgetClick(){
+    onWidgetClick() {
         this.setState(
             {
                 canUpdate: true
@@ -68,7 +62,7 @@ class App extends React.Component {
         );
     }
 
-    onDropdownClick(canUpdate, showingComponent){
+    onDropdownClick(canUpdate, showingComponent) {
         this.setState(
             {
                 canUpdate,
@@ -77,11 +71,11 @@ class App extends React.Component {
         );
     }
 
-    render(){
+    render() {
         const { y, x } = this.state;
 
-        return(
-            <div 
+        return (
+            <div
                 style={{
                     top: `${y}px`,
                     left: `${x}px`
@@ -89,11 +83,11 @@ class App extends React.Component {
                 className="filter-widget"
                 onClick={this.onWidgetClick}
             >
-                <Header 
-                    title="FILTER WIDGET" 
-                    onMouseDown={this.onMouseDown} 
+                <Header
+                    title="FILTER WIDGET"
+                    onMouseDown={this.onMouseDown}
                 />
-                <Body 
+                <Body
                     tables={this.props.tables}
                     showingComponent={this.state.showingComponent}
                     onDropdownClick={this.onDropdownClick}
@@ -102,6 +96,14 @@ class App extends React.Component {
             </div>
         );
     }
+}
+
+App.propTypes = {
+    tables: PropTypes.object.isRequired
+}
+
+App.defaultProps = {
+    tables: {}
 }
 
 export default App;

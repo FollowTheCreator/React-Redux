@@ -1,10 +1,11 @@
 import React from 'react';
 import './style.css';
-import Rows from '../Rows';
-import Utils from '../../../Services/Utils';
+import Rows from '../FilterWidgetRows';
+import Utils from '../../Utils';
+import PropTypes from 'prop-types';
 
-class Dropdown extends React.Component{
-    constructor(props){
+class FilterWidgetDropdown extends React.PureComponent {
+    constructor(props) {
         super(props);
 
         this.onClick = this.onClick.bind(this);
@@ -15,16 +16,16 @@ class Dropdown extends React.Component{
         }
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         const component = this.props.showingComponent;
-        if(this.props.canUpdate){
+        if (this.props.canUpdate) {
             this.props.onDropdownClick(false, null);
             this.setState(
                 {
                     display: "none"
                 },
                 () => {
-                    if(component !== null){
+                    if (component !== null) {
                         component.setState({
                             display: "block"
                         });
@@ -33,16 +34,16 @@ class Dropdown extends React.Component{
             );
         }
     }
-        
-    onClick(){
-        if(this.props.rows.length > 0){ 
-            if(this.state.display !== "block"){
+
+    onClick() {
+        if (this.props.rows.length > 0) {
+            if (this.state.display !== "block") {
                 this.props.onDropdownClick(true, this);
                 this.setState({
                     display: "block"
                 });
             }
-            else{
+            else {
                 this.setState({
                     display: "none"
                 });
@@ -50,18 +51,18 @@ class Dropdown extends React.Component{
         }
     }
 
-    onContentClick(e){
+    onContentClick(e) {
         e.stopPropagation();
     }
 
-    getCheckedRows(){
+    getCheckedRows() {
         return Utils.getRowsPreview(this.props.rows);
     }
 
-    render(){
+    render() {
         const checkedRows = this.getCheckedRows();
 
-        return(
+        return (
             <div className="dropdown">
                 <button className="dropdown-btn" onClick={this.onClick}>
                     <p className="dropdown-btn__title">
@@ -85,4 +86,22 @@ class Dropdown extends React.Component{
     }
 }
 
-export default Dropdown;
+FilterWidgetDropdown.propTypes = {
+    canUpdate: PropTypes.bool.isRequired,
+    onDropdownClick: PropTypes.func.isRequired,
+    showingComponent: PropTypes.object,
+    rows: PropTypes.array.isRequired,
+    title: PropTypes.string,
+    onRowClick: PropTypes.func.isRequired
+}
+
+FilterWidgetDropdown.defaultProps = {
+    canUpdate: true,
+    showingComponent: null,
+    rows: [],
+    title: "",
+    onDropdownClick: () => { },
+    onRowClick: () => { }
+}
+
+export default FilterWidgetDropdown;
