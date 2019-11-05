@@ -4,7 +4,7 @@ import Rows from '../FilterWidgetRows';
 import Utils from '../../Utils';
 import PropTypes from 'prop-types';
 
-class Dropdown extends React.PureComponent {
+class FilterWidgetDropdown extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -86,7 +86,7 @@ class Dropdown extends React.PureComponent {
     }
 }
 
-Dropdown.propTypes = {
+FilterWidgetDropdown.propTypes = {
     canUpdate: PropTypes.bool.isRequired,
     onDropdownClick: PropTypes.func.isRequired,
     showingComponent: PropTypes.object,
@@ -95,7 +95,7 @@ Dropdown.propTypes = {
     onRowClick: PropTypes.func.isRequired
 }
 
-Dropdown.defaultProps = {
+FilterWidgetDropdown.defaultProps = {
     canUpdate: true,
     showingComponent: null,
     rows: [],
@@ -104,4 +104,4 @@ Dropdown.defaultProps = {
     onRowClick: () => { }
 }
 
-export default Dropdown;
+export default FilterWidgetDropdown;

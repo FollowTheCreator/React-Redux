@@ -2,7 +2,7 @@ import React from 'react';
 import './style.css';
 import PropTypes from 'prop-types';
 
-const StateStorage = (props) => {
+const FilterWidgetStateStorage = (props) => {
     return (
         <div className="state-storage">
             <button
@@ -21,16 +21,16 @@ const StateStorage = (props) => {
     );
 }
 
-StateStorage.propTypes = {
+FilterWidgetStateStorage.propTypes = {
     stateSaved: PropTypes.bool.isRequired,
     onSaveClick: PropTypes.func.isRequired,
     onRestoreClick: PropTypes.func.isRequired
 }
 
-StateStorage.defaultProps = {
+FilterWidgetStateStorage.defaultProps = {
     stateSaved: false,
     onSaveClick: () => { },
     onRestoreClick: () => { }
 }
 
-export default StateStorage;
+export default FilterWidgetStateStorage;

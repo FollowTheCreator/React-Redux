@@ -8,9 +8,10 @@ import Utils from '../../Utils';
 import CellsService from '../../Services/CellsService';
 import DimensionsService from '../../Services/DimensionsService';
 import ContextsService from '../../Services/ContextsService';
+import StateService from '../../Services/StateService';
 import PropTypes from 'prop-types';
 
-class Body extends React.PureComponent {
+class FilterWidgetBody extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -50,7 +51,7 @@ class Body extends React.PureComponent {
     }
 
     componentDidMount() {
-        const savedState = Utils.getSavedState(this.getDefaultSearchTypeValue());
+        const savedState = StateService.getSavedState(this.getDefaultSearchTypeValue());
         const stateSaved = savedState.stateSaved;
         const searchType = savedState.searchType;
         const sortAsc = savedState.sortAsc;
@@ -99,33 +100,25 @@ class Body extends React.PureComponent {
     }
 
     onDimensionClick(row, checked) {
+        let sortedCells = [];
         if (checked) {
             const table = DimensionsService.getDimensionTable(this.props.contexts, row);
             const rows = Array.from(table.rows);
 
             const cells = CellsService.getDimensionsCells(rows, row, checked);
-
-            const dimensions = DimensionsService.getNewDimensions(this.props.dimensions, row);
-
-            const sortedCells = CellsService.getSortedCells(this.state.sortAsc, this.props.cells, cells);
-
-            this.props.setDimensions(dimensions);
-            this.props.setCells(sortedCells);
-
-            this.search(this.state.searchString);
+            sortedCells = CellsService.getSortedCells(this.state.sortAsc, this.props.cells, cells);
         }
         else {
             const cells = CellsService.getCheckedCells(this.props.cells, row);
-
-            const dimensions = DimensionsService.getNewDimensions(this.props.dimensions, row);
-
-            const sortedCells = CellsService.getSortedCells(this.state.sortAsc, cells);
-
-            this.props.setDimensions(dimensions);
-            this.props.setCells(sortedCells);
-
-            this.search(this.state.searchString);
+            sortedCells = CellsService.getSortedCells(this.state.sortAsc, cells);
         }
+
+        const dimensions = DimensionsService.getNewDimensions(this.props.dimensions, row);
+
+        this.props.setDimensions(dimensions);
+        this.props.setCells(sortedCells);
+
+        this.search(this.state.searchString);
     }
 
     onRowClick() {
@@ -190,9 +183,11 @@ class Body extends React.PureComponent {
                 stateSaved: !this.state.stateSaved
             },
             () => {
-                localStorage.setItem("stateSaved", this.state.stateSaved);
-                localStorage.setItem("sortAsc", this.state.sortAsc);
-                localStorage.setItem("searchType", this.state.searchType);
+                StateService.setSavedState({
+                    stateSaved: this.state.stateSaved,
+                    sortAsc: this.state.sortAsc,
+                    searchType: this.state.searchType
+                });
             }
         );
     }
@@ -249,7 +244,7 @@ class Body extends React.PureComponent {
     }
 }
 
-Body.propTypes = {
+FilterWidgetBody.propTypes = {
     tables: PropTypes.array.isRequired,
     contexts: PropTypes.array.isRequired,
     dimensions: PropTypes.array.isRequired,
@@ -265,7 +260,7 @@ Body.propTypes = {
     canUpdate: PropTypes.bool.isRequired
 }
 
-Body.defaultProps = {
+FilterWidgetBody.defaultProps = {
     tables: [],
     contexts: [],
     dimensions: [],
@@ -281,4 +276,4 @@ Body.defaultProps = {
     canUpdate: true
 }
 
-export default Body;
+export default FilterWidgetBody;

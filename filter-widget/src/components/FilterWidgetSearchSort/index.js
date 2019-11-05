@@ -2,7 +2,7 @@ import React from 'react';
 import './style.css';
 import PropTypes from 'prop-types';
 
-const SearchSort = (props) => {
+const FilterWidgetSearchSort = (props) => {
     return (
         <div
             className="search-settings-filter search-settings__sort"
@@ -13,14 +13,14 @@ const SearchSort = (props) => {
     );
 }
 
-SearchSort.propTypes = {
+FilterWidgetSearchSort.propTypes = {
     sortAsc: PropTypes.bool.isRequired,
     onSortClick: PropTypes.func.isRequired
 }
 
-SearchSort.defaultProps = {
+FilterWidgetSearchSort.defaultProps = {
     sortAsc: true,
     onSortClick: () => { }
 }
 
-export default SearchSort;
+export default FilterWidgetSearchSort;

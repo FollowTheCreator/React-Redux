@@ -3,7 +3,7 @@ import './style.css';
 import Row from '../FilterWidgetRow';
 import PropTypes from 'prop-types';
 
-const Rows = (props) => {
+const FilterWidgetRows = (props) => {
     return (
         <ul className="rows">
             {props.rows.map(row =>
@@ -15,14 +15,14 @@ const Rows = (props) => {
     );
 }
 
-Rows.propTypes = {
+FilterWidgetRows.propTypes = {
     rows: PropTypes.array.isRequired,
     onRowClick: PropTypes.func.isRequired
 }
 
-Rows.defaultProps = {
+FilterWidgetRows.defaultProps = {
     rows: [],
     onRowClick: () => { }
 }
 
-export default Rows;
+export default FilterWidgetRows;

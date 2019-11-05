@@ -2,7 +2,7 @@ import React from 'react';
 import './style.css';
 import PropTypes from 'prop-types';
 
-const Header = (props) => {
+const FilterWidgetHeader = (props) => {
     return (
         <div
             className="drag-hook"
@@ -13,14 +13,14 @@ const Header = (props) => {
     );
 }
 
-Header.propTypes = {
+FilterWidgetHeader.propTypes = {
     onMouseDown: PropTypes.func.isRequired,
     title: PropTypes.string.isRequired
 }
 
-Header.defaultProps = {
+FilterWidgetHeader.defaultProps = {
     onMouseDown: () => { },
     title: ""
 }
 
-export default Header;
+export default FilterWidgetHeader;

@@ -2,7 +2,7 @@ import React from 'react';
 import './style.css';
 import PropTypes from 'prop-types';
 
-const SearchTypes = (props) => {
+const FilterWidgetSearchTypes = (props) => {
     const searchTypes = props.searchTypes.map(type => (
         <li
             key={type.value}
@@ -23,16 +23,16 @@ const SearchTypes = (props) => {
     );
 }
 
-SearchTypes.propTypes = {
+FilterWidgetSearchTypes.propTypes = {
     searchTypes: PropTypes.array.isRequired,
     searchType: PropTypes.string.isRequired,
     onSearchTypeClick: PropTypes.func.isRequired
 }
 
-SearchTypes.defaultProps = {
+FilterWidgetSearchTypes.defaultProps = {
     searchTypes: [],
     searchType: "_*_",
     onSearchTypeClick: () => { }
 }
 
-export default SearchTypes;
+export default FilterWidgetSearchTypes;

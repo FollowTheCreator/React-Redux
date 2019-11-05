@@ -10,10 +10,10 @@ import {
 
 const mapStateToProps = (state) => {
     return {
-        contexts: state.contexts,
-        dimensions: state.dimensions,
-        cells: state.cells,
-        filteredCells: state.filteredCells
+        contexts: state.rows.contexts,
+        dimensions: state.rows.dimensions,
+        cells: state.rows.cells,
+        filteredCells: state.rows.filteredCells
     };
 };
 

@@ -4,7 +4,7 @@ import SearchTypes from '../FilterWidgetSearchTypes';
 import SearchSort from '../FilterWidgetSearchSort';
 import PropTypes from 'prop-types';
 
-const Search = (props) => {
+const FilterWidgetSearch = (props) => {
     let inputRef = React.createRef();
 
     const onChange = () => {
@@ -29,7 +29,7 @@ const Search = (props) => {
     );
 }
 
-Search.propTypes = {
+FilterWidgetSearch.propTypes = {
     searchTypes: PropTypes.array.isRequired,
     searchType: PropTypes.string.isRequired,
     onSearchTypeClick: PropTypes.func.isRequired,
@@ -38,7 +38,7 @@ Search.propTypes = {
     sortAsc: PropTypes.bool.isRequired
 }
 
-Search.defaultProps = {
+FilterWidgetSearch.defaultProps = {
     searchTypes: [],
     searchType: "_*_",
     onSearchTypeClick: () => { },
@@ -47,4 +47,4 @@ Search.defaultProps = {
     sortAsc: true
 }
 
-export default Search;
+export default FilterWidgetSearch;

@@ -1,16 +1,18 @@
 import { combineReducers } from 'redux';
 import tables from './tables';
-import contexts from './contexts';
+import rows from './rows';
+/* import contexts from './contexts';
 import dimensions from './dimensions';
 import cells from './cells';
-import filteredCells from './filteredCells';
+import filteredCells from './filteredCells'; */
 
 const reducer = combineReducers({
     tables,
-    contexts,
+    rows
+    /* contexts,
     dimensions,
     cells,
-    filteredCells
+    filteredCells */
 });
 
 export default reducer;

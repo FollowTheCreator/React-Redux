@@ -2,7 +2,7 @@ import React from 'react';
 import './style.css';
 import PropTypes from 'prop-types';
 
-class Row extends React.PureComponent {
+class FilterWidgetRow extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -38,14 +38,14 @@ class Row extends React.PureComponent {
     }
 }
 
-Row.propTypes = {
+FilterWidgetRow.propTypes = {
     onRowClick: PropTypes.func.isRequired,
     row: PropTypes.object.isRequired
 }
 
-Row.defaultProps = {
+FilterWidgetRow.defaultProps = {
     row: {},
     onRowClick: () => { }
 }
 
-export default Row;
+export default FilterWidgetRow;
