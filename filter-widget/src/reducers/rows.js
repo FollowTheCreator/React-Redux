@@ -7,7 +7,9 @@ const initialState = {
 
 const rows = (state = initialState, action) => {
     switch (action.type) {
-        case "SET_CONTEXTS":
+        case "SET_CONTEXTS_BEGIN":
+            return state;
+        case "SET_CONTEXTS_SUCCESS":
             return Object.assign({}, state, {
                 contexts: action.payload
             });

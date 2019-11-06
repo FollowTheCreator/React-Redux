@@ -1,100 +1,70 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.css';
 import Header from './FilterWidgetHeader';
 import Body from '../containers/Body';
 import PropTypes from 'prop-types';
 
-class App extends React.PureComponent {
-    constructor(props){
-        super(props);
+const App = (props) => {
+    const [showingComponent, setShowingComponent] = useState("");
+    const [canUpdate, setCanUpdate] = useState(true);
+    const [x, setX] = useState(0);
+    const [y, setY] = useState(0);
+    const [prevX, setPrevX] = useState(0);
+    const [prevY, setPrevY] = useState(0);
 
-        this.onMouseMove = this.onMouseMove.bind(this);
-        this.onMouseUp = this.onMouseUp.bind(this);
-        this.onMouseDown = this.onMouseDown.bind(this);
-        this.onWidgetClick = this.onWidgetClick.bind(this);
-        this.onDropdownClick = this.onDropdownClick.bind(this);
+    const onMouseMove = (e) => {
+        const xShift = prevX - e.clientX;
+        const yShift = prevY - e.clientY;
 
-        this.state = {
-            showingComponent: null,
-            canUpdate: true,
-            x: 0,
-            y: 0,
-            prevX: 0,
-            prevY: 0
-        }
+        setX(x - xShift);
+        setY(y - yShift);
+        setPrevX(e.clientX);
+        setPrevY(e.clientY);
     }
 
-    onMouseMove(e){
-        e.preventDefault();
-        
-        const xShift = this.state.prevX - e.clientX;
-        const yShift = this.state.prevY - e.clientY;
+    const onMouseDown = (e) => {
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
 
-        this.setState({
-            x: this.state.x - xShift,
-            y: this.state.y - yShift,
-            prevX: e.clientX,
-            prevY: e.clientY
-        });
+        setPrevX(e.clientX);
+        setPrevY(e.clientY);
     }
 
-    onMouseDown(e){
-        document.addEventListener('mousemove', this.onMouseMove);
-        document.addEventListener('mouseup', this.onMouseUp);
-
-        this.setState({
-            prevX: e.clientX,
-            prevY: e.clientY
-        });
+    const onMouseUp = () => {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
     }
 
-    onMouseUp(){
-        document.removeEventListener('mousemove', this.onMouseMove);
-        document.removeEventListener('mouseup', this.onMouseUp);
+    const onWidgetClick = () => {
+        setCanUpdate(true);
     }
 
-    onWidgetClick(){
-        this.setState(
-            {
-                canUpdate: true
-            }
-        );
+    const onDropdownClick = (canUpdate, showingComponent) => {
+        setCanUpdate(canUpdate);
+        setShowingComponent(showingComponent);
     }
 
-    onDropdownClick(canUpdate, showingComponent){
-        this.setState(
-            {
-                canUpdate,
-                showingComponent
-            }
-        );
-    }
-
-    render(){
-        const { y, x } = this.state;
-
-        return(
-            <div 
-                style={{
-                    top: `${y}px`,
-                    left: `${x}px`
-                }}
-                className="filter-widget"
-                onClick={this.onWidgetClick}
-            >
-                <Header 
-                    title="FILTER WIDGET" 
-                    onMouseDown={this.onMouseDown} 
-                />
-                <Body 
-                    tables={this.props.tables}
-                    showingComponent={this.state.showingComponent}
-                    onDropdownClick={this.onDropdownClick}
-                    canUpdate={this.state.canUpdate}
-                />
-            </div>
-        );
-    }
+    return (
+        <div
+            style={{
+                top: `${y}px`,
+                left: `${x}px`
+            }}
+            className="filter-widget"
+            onClick={onWidgetClick}
+        >
+            <Header
+                title="FILTER WIDGET"
+                onMouseDown={onMouseDown}
+            />
+            <Body
+                tables={props.tables}
+                showingComponent={showingComponent}
+                onDropdownClick={onDropdownClick}
+                canUpdate={canUpdate}
+            />
+        </div>
+    );
 }
 
 App.propTypes = {

@@ -1,41 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './style.css';
 import PropTypes from 'prop-types';
 
-class FilterWidgetRow extends React.PureComponent {
-    constructor(props) {
-        super(props);
+const FilterWidgetRow = (props) => {
+    const [checked, setChecked] = useState(false);
 
-        this.state = {
-            checked: false
-        }
-
-        this.onClick = this.onClick.bind(this);
+    const onClick = () => {
+        const checked1 = !checked;
+        setChecked(checked1);
+        props.onRowClick(props.row, checked1);
     }
 
-    onClick() {
-        const checked = !this.state.checked;
-        this.setState({
-            checked: checked
-        });
-        this.props.onRowClick(this.props.row, checked);
-    }
-
-    render() {
-        return (
-            <label className="row" onClick={this.onClick}>
-                <div className="row-checkbox">
-                    <div
-                        className="row-checkbox__mark"
-                        style={{ display: this.state.checked ? "block" : "none" }}
-                    ></div>
-                </div>
-                <span className="row__title">
-                    {this.props.row.element.id}
-                </span>
-            </label>
-        );
-    }
+    return (
+        <label className="row" onClick={onClick}>
+            <div className="row-checkbox">
+                <div
+                    className="row-checkbox__mark"
+                    style={{ display: checked ? "block" : "none" }}
+                ></div>
+            </div>
+            <span className="row__title">
+                {props.row.element.id}
+            </span>
+        </label>
+    );
 }
 
 FilterWidgetRow.propTypes = {

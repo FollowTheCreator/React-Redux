@@ -16,6 +16,10 @@ class StateService {
         localStorage.setItem("sortAsc", savedState.sortAsc);
         localStorage.setItem("searchType", savedState.searchType);
     }
+
+    static setStateSaved(value) {
+        localStorage.setItem("stateSaved", value);
+    }
 }
 
 export default StateService;

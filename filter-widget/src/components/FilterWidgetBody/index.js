@@ -1,247 +1,208 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.css';
 import Dropdown from '../FilterWidgetDropdown';
 import Search from '../FilterWidgetSearch';
 import Rows from '../FilterWidgetRows';
 import StateStorage from '../FilterWidgetStateStorage';
-import Utils from '../../Utils';
 import CellsService from '../../Services/CellsService';
 import DimensionsService from '../../Services/DimensionsService';
 import ContextsService from '../../Services/ContextsService';
 import StateService from '../../Services/StateService';
 import PropTypes from 'prop-types';
 
-class FilterWidgetBody extends React.PureComponent {
-    constructor(props) {
-        super(props);
+const DIMENSIONS = "DIMENSIONS";
+const CONTEXTS = "CONTEXTS";
 
-        this.onSearchChange = this.onSearchChange.bind(this);
-        this.onContextClick = this.onContextClick.bind(this);
-        this.onDimensionClick = this.onDimensionClick.bind(this);
-        this.onRowClick = this.onRowClick.bind(this);
-        this.onSortClick = this.onSortClick.bind(this);
-        this.onSearchTypeClick = this.onSearchTypeClick.bind(this);
-        this.search = this.search.bind(this);
-        this.onSaveClick = this.onSaveClick.bind(this);
-        this.onRestoreClick = this.onRestoreClick.bind(this);
-        this.getDefaultSearchTypeValue = this.getDefaultSearchTypeValue.bind(this);
-
-        this.searchTypes = [
-            {
-                isDefault: true,
-                value: "_*_"
-            },
-            {
-                isDefault: false,
-                value: "*_"
-            },
-            {
-                isDefault: false,
-                value: "*"
-            }
-        ];
-
-        this.state = {
-            sortAsc: true,
-            searchType: this.getDefaultSearchTypeValue(),
-            searchString: "",
-            isSearching: false,
-            stateSaved: false
+const FilterWidgetBody = (props) => {
+    const searchTypes = [
+        {
+            isDefault: true,
+            value: "_*_"
+        },
+        {
+            isDefault: false,
+            value: "*_"
+        },
+        {
+            isDefault: false,
+            value: "*"
         }
+    ];
+
+    const getDefaultSearchTypeValue = () => {
+        return searchTypes.find(type => type.isDefault).value;
     }
 
-    componentDidMount() {
-        const savedState = StateService.getSavedState(this.getDefaultSearchTypeValue());
-        const stateSaved = savedState.stateSaved;
-        const searchType = savedState.searchType;
-        const sortAsc = savedState.sortAsc;
+    const [searchType, setSearchType] = useState(getDefaultSearchTypeValue());
+    const [searchString, setSearchString] = useState("");
+    const [isSearching, setIsSearching] = useState(false);
+    const [stateSaved, setStateSaved] = useState(false);
+    const [sortAsc, setSortAsc] = useState(true);
 
-        const tables = this.props.tables;
-        const contexts = ContextsService.getInitialContexts(tables);
-        this.props.setContexts(contexts);
+    useEffect(
+        () => {
+            const savedState1 = StateService.getSavedState(getDefaultSearchTypeValue());
+            const stateSaved1 = savedState1.stateSaved;
+            const searchType1 = savedState1.searchType;
+            const sortAsc1 = savedState1.sortAsc;
 
-        const sortAscResult = sortAsc !== null ? sortAsc : true;
-        this.setState({
-            searchType: stateSaved === true ? searchType : this.state.searchType,
-            sortAsc: stateSaved === true ? sortAscResult : this.state.sortAsc,
-            stateSaved: stateSaved !== null ? stateSaved : false
-        });
-    }
+            const contexts = ContextsService.getInitialContexts(props.tables);
+            props.setContexts(contexts);
 
-    getDefaultSearchTypeValue() {
-        return this.searchTypes.find(type => type.isDefault).value;
-    }
+            const sortAscResult = sortAsc1 !== null ? sortAsc1 : true;
+            setSearchType(stateSaved1 === true ? searchType1 : searchType);
+            setSortAsc(stateSaved1 === true ? sortAscResult : sortAsc);
+            setStateSaved(stateSaved1 !== null ? stateSaved1 : false);
+        },
+        []
+    );
 
-    onContextClick(row, checked) {
+    const onContextClick = (row, checked) => {
         if (checked) {
             const headers = row.element.getElementsByTagName("th");
 
             const dimensions = DimensionsService.getDimensions(headers, row);
 
-            const contexts = ContextsService.getNewContexts(this.props.contexts, row);
-
-            this.props.setContexts(contexts);
-            this.props.addDimensions(dimensions);
-
-            this.search(this.state.searchString);
+            props.addDimensions(dimensions);
         }
         else {
-            const dimensions = DimensionsService.getCheckedDimensions(this.props.dimensions, row);
-            const cells = CellsService.getContextsCells(this.props.dimensions, this.props.cells, row);
+            const dimensions = DimensionsService.getCheckedDimensions(props.dimensions, row.element.id);
+            const cells = CellsService.getContextsCells(props.dimensions, props.cells, row.element.id);
 
-            const contexts = ContextsService.getNewContexts(this.props.contexts, row);
-
-            this.props.setContexts(contexts);
-            this.props.setDimensions(dimensions);
-            this.props.setCells(cells);
-
-            this.search(this.state.searchString);
+            props.setDimensions(dimensions);
+            props.setCells(cells);
         }
+
+        const contexts = ContextsService.getNewContexts(props.contexts, row.element.id);
+        props.setContexts(contexts);
+
+        search(searchString);
     }
 
-    onDimensionClick(row, checked) {
+    const onDimensionClick = (row, checked) => {
         let sortedCells = [];
         if (checked) {
-            const table = DimensionsService.getDimensionTable(this.props.contexts, row);
+            const table = DimensionsService.getDimensionTable(props.contexts, row.parent.element.id);
             const rows = Array.from(table.rows);
 
             const cells = CellsService.getDimensionsCells(rows, row, checked);
-            sortedCells = CellsService.getSortedCells(this.state.sortAsc, this.props.cells, cells);
+            sortedCells = CellsService.getSortedCells(sortAsc, props.cells, cells);
         }
         else {
-            const cells = CellsService.getCheckedCells(this.props.cells, row);
-            sortedCells = CellsService.getSortedCells(this.state.sortAsc, cells);
+            const cells = CellsService.getCheckedCells(props.cells, row.element.id);
+            sortedCells = CellsService.getSortedCells(sortAsc, cells);
         }
 
-        const dimensions = DimensionsService.getNewDimensions(this.props.dimensions, row);
+        const dimensions = DimensionsService.getNewDimensions(props.dimensions, row.element.id);
 
-        this.props.setDimensions(dimensions);
-        this.props.setCells(sortedCells);
+        props.setDimensions(dimensions);
+        props.setCells(sortedCells);
 
-        this.search(this.state.searchString);
+        search(searchString);
     }
 
-    onRowClick() {
+    const onRowClick = () => {
 
     }
 
-    onSearchChange(value) {
-        this.setState(
-            {
-                isSearching: value === "" ? false : true,
-                searchString: value
-            },
-            () => this.search(value)
-        );
+    const onSearchChange = (value) => {
+        setIsSearching(value === "" ? false : true);
+        setSearchString(value);
+        search(value);
     }
 
-    search(value) {
-        let filteredCells = this.props.cells;
-        switch (this.state.searchType) {
+    const search = (value) => {
+        let filteredCells = [];
+        switch (searchType) {
             case "_*_":
-                filteredCells = this.props.cells.filter(item => item.element.innerText.includes(value));
-                this.props.setFilteredCells(filteredCells);
+                filteredCells = props.cells.filter(item => item.element.innerText.includes(value));
                 break;
             case "*_":
-                filteredCells = this.props.cells.filter(item => item.element.innerText.startsWith(value));
-                this.props.setFilteredCells(filteredCells);
+                filteredCells = props.cells.filter(item => item.element.innerText.startsWith(value));
                 break;
             case "*":
-                filteredCells = this.props.cells.filter(item => item.element.innerText === value);
-                this.props.setFilteredCells(filteredCells);
+                filteredCells = props.cells.filter(item => item.element.innerText === value);
                 break;
             default:
-                this.props.setFilteredCells(filteredCells);
+                filteredCells = props.cells;
         }
+
+        props.setFilteredCells(filteredCells);
     }
 
-    onSortClick() {
-        this.props.setCells(this.props.cells.reverse());
-        this.props.setFilteredCells(this.props.filteredCells.reverse());
+    const onSortClick = () => {
+        props.setCells(props.cells.reverse());
+        props.setFilteredCells(props.filteredCells.reverse());
 
-        this.setState(
-            {
-                sortAsc: !this.state.sortAsc,
-                stateSaved: false
-            }
-        );
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+        const sortAscRes = !sortAsc;
+        setSortAsc(sortAscRes);
+        setStateSaved(false);
     }
 
-    onSearchTypeClick(type) {
-        this.setState(
-            {
-                searchType: type,
-                stateSaved: false
-            },
-            () => this.search(this.state.searchString)
-        );
+    const onSearchTypeClick = (type) => {
+        setSearchType(type);
+        setStateSaved(false);
+        search(searchString);
     }
 
-    onSaveClick() {
-        this.setState(
-            {
-                stateSaved: !this.state.stateSaved
-            },
-            () => {
-                StateService.setSavedState({
-                    stateSaved: this.state.stateSaved,
-                    sortAsc: this.state.sortAsc,
-                    searchType: this.state.searchType
-                });
-            }
-        );
+    const onSaveClick = () => {
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+        const stateSavedRes = !stateSaved;
+        setStateSaved(stateSavedRes);
+        StateService.setSavedState({
+            stateSaved: stateSavedRes,
+            sortAsc: sortAsc,
+            searchType: searchType
+        });
     }
 
-    onRestoreClick() {
-        this.setState(
-            {
-                stateSaved: false,
-                searchType: this.getDefaultSearchTypeValue(),
-                sortAsc: true
-            },
-            () => localStorage.setItem("stateSaved", false)
-        );
+    const onRestoreClick = () => {
+        setStateSaved(false);
+        setSearchType(getDefaultSearchTypeValue());
+        setSortAsc(true);
+        StateService.setStateSaved(false);
     }
 
-    render() {
-        return (
-            <div className="body">
-                <Dropdown
-                    onDropdownClick={this.props.onDropdownClick}
-                    title="CONTEXTS"
-                    rows={this.props.contexts}
-                    onRowClick={this.onContextClick}
-                    showingComponent={this.props.showingComponent}
-                    canUpdate={this.props.canUpdate}
-                />
-                <Dropdown
-                    onDropdownClick={this.props.onDropdownClick}
-                    title="DIMENSIONS"
-                    rows={this.props.dimensions}
-                    onRowClick={this.onDimensionClick}
-                    showingComponent={this.props.showingComponent}
-                    canUpdate={this.props.canUpdate}
-                />
-                <Search
-                    onSearchChange={this.onSearchChange}
-                    onSortClick={this.onSortClick}
-                    sortAsc={this.state.sortAsc}
-                    searchType={this.state.searchType}
-                    onSearchTypeClick={this.onSearchTypeClick}
-                    searchTypes={this.searchTypes}
-                />
-                <Rows
-                    rows={this.state.isSearching ? this.props.filteredCells : this.props.cells}
-                    onRowClick={this.onRowClick}
-                />
-                <StateStorage
-                    onSaveClick={this.onSaveClick}
-                    onRestoreClick={this.onRestoreClick}
-                    stateSaved={this.state.stateSaved}
-                />
-            </div>
-        );
-    }
+    return (
+        <div className="body">
+            <Dropdown
+                onDropdownClick={props.onDropdownClick}
+                title={CONTEXTS}
+                rows={props.contexts}
+                onRowClick={onContextClick}
+                showingComponent={props.showingComponent}
+                canUpdate={props.canUpdate}
+                id={CONTEXTS}
+            />
+            <Dropdown
+                onDropdownClick={props.onDropdownClick}
+                title={DIMENSIONS}
+                rows={props.dimensions}
+                onRowClick={onDimensionClick}
+                showingComponent={props.showingComponent}
+                canUpdate={props.canUpdate}
+                id={DIMENSIONS}
+            />
+            <Search
+                onSearchChange={onSearchChange}
+                onSortClick={onSortClick}
+                sortAsc={sortAsc}
+                searchType={searchType}
+                onSearchTypeClick={onSearchTypeClick}
+                searchTypes={searchTypes}
+            />
+            <Rows
+                rows={isSearching ? props.filteredCells : props.cells}
+                onRowClick={onRowClick}
+            />
+            <StateStorage
+                onSaveClick={onSaveClick}
+                onRestoreClick={onRestoreClick}
+                stateSaved={stateSaved}
+            />
+        </div>
+    );
 }
 
 FilterWidgetBody.propTypes = {
@@ -256,7 +217,7 @@ FilterWidgetBody.propTypes = {
     setCells: PropTypes.func.isRequired,
     setFilteredCells: PropTypes.func.isRequired,
     onDropdownClick: PropTypes.func.isRequired,
-    showingComponent: PropTypes.object,
+    showingComponent: PropTypes.string,
     canUpdate: PropTypes.bool.isRequired
 }
 
@@ -272,7 +233,7 @@ FilterWidgetBody.defaultProps = {
     setCells: () => { },
     setFilteredCells: () => { },
     onDropdownClick: () => { },
-    showingComponent: {},
+    showingComponent: "",
     canUpdate: true
 }
 

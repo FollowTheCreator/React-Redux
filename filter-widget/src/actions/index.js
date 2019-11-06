@@ -1,13 +1,20 @@
-export const setContexts = (payload) => ({
-    type: "SET_CONTEXTS",
+export const setContextsBegin = () => ({
+    type: "SET_CONTEXTS_BEGIN"
+});
+export const setContextsSuccess = (payload) => ({
+    type: "SET_CONTEXTS_SUCCESS",
     payload
 });
+export const setContexts = (payload) => (dispatch) => {
+    setTimeout(() => {
+        dispatch(setContextsSuccess(payload))
+    }, 5000);
+};
 
 export const setDimensions = (payload) => ({
     type: "SET_DIMENSIONS",
     payload
 });
-
 export const addDimensions = (payload) => ({
     type: "ADD_DIMENSIONS",
     payload

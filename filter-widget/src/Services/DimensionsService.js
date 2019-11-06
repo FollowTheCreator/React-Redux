@@ -17,41 +17,26 @@ class DimensionsService {
         return dimensions;
     }
 
-    static getCheckedDimensions(headers = [], row = {}) {
-        const dimensions = headers.filter(header => {
-            if (header.parent.element.id !== row.element.id) {
-                return true;
-            }
-
-            return false;
-        });
-
-        return dimensions;
+    static getCheckedDimensions(headers = [], id) {
+        return headers.filter(header => header.parent.element.id !== id);
     }
 
-    static getDimensionTable(contexts = [], row = {}) {
+    static getDimensionTable(contexts = [], parentId) {
         const table = contexts.find(
-            (context) => row.parent.element.id === context.element.id
+            context => parentId === context.element.id
         ).element;
 
         return table;
     }
 
-    static getNewDimensions(prevDimensions = [], row = {}) {
-        const dimensions = prevDimensions.map((item) => {
-            if (item.element.id === row.element.id) {
-                return {
-                    checked: !item.checked,
-                    element: item.element,
-                    parent: item.parent,
-                    index: item.index
-                };
-            }
-
-            return item;
+    static getNewDimensions(dimensions = [], id) {
+        const newDimensions = dimensions.map((item) => {
+            return Object.assign({}, item, {
+                checked: item.element.id === id ? !item.checked : item.checked
+            });
         });
 
-        return dimensions;
+        return newDimensions;
     }
 }
 

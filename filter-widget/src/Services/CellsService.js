@@ -1,9 +1,9 @@
 class CellsService {
-    static getContextsCells(headers = [], rows = [], row = {}) {
+    static getContextsCells(headers = [], rows = [], id) {
         const cells = [];
 
         headers.forEach(header => {
-            if (header.parent.element.id === row.element.id) {
+            if (header.parent.element.id === id) {
                 rows.forEach(item => {
                     if (item.parent.parent.element.id !== header.parent.element.id) {
                         if (!cells.includes(item)) {
@@ -20,17 +20,15 @@ class CellsService {
     static getDimensionsCells(rows = [], row = {}, checked = false) {
         const cells = [];
 
-        rows.forEach((item, index) => {
-            if (index > 0) {
-                const cell = item.cells[row.index];
-                cell.id = cell.innerText;
+        rows.slice(1).forEach(item => {
+            const cell = item.cells[row.index];
+            cell.id = cell.innerText;
 
-                cells.push({
-                    checked,
-                    parent: row,
-                    element: cell
-                });
-            }
+            cells.push({
+                checked,
+                parent: row,
+                element: cell
+            });
         });
 
         return cells;
@@ -48,16 +46,8 @@ class CellsService {
         return sortedCells;
     }
 
-    static getCheckedCells(rows = [], row = {}) {
-        const cells = rows.filter(item => {
-            if (item.parent.element.id !== row.element.id) {
-                return true;
-            }
-
-            return false;
-        });
-
-        return cells;
+    static getCheckedCells(rows = [], id) {
+        return rows.filter(item => item.parent.element.id !== id);
     }
 }
 

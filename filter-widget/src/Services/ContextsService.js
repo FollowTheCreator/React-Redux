@@ -12,16 +12,11 @@ class ContextsService {
         return contexts;
     }
 
-    static getNewContexts(contexts = [], row = {}) {
+    static getNewContexts(contexts = [], id) {
         const newContexts = contexts.map((item) => {
-            if (item.element.id === row.element.id) {
-                return {
-                    checked: !item.checked,
-                    element: item.element
-                };
-            }
-
-            return item;
+            return Object.assign({}, item, {
+                checked: item.element.id === id ? !item.checked : item.checked
+            });
         });
 
         return newContexts;

@@ -1,107 +1,88 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.css';
 import Rows from '../FilterWidgetRows';
 import Utils from '../../Utils';
 import PropTypes from 'prop-types';
 
-class FilterWidgetDropdown extends React.PureComponent {
-    constructor(props) {
-        super(props);
+const FilterWidgetDropdown = (props) => {
+    const [display, setDisplay] = useState("none");
 
-        this.onClick = this.onClick.bind(this);
-        this.getCheckedRows = this.getCheckedRows.bind(this);
+    useEffect(() => {
+        const component = props.showingComponent;
 
-        this.state = {
-            display: "none"
+        if (!props.canUpdate) {
+            return;
+        }
+
+        props.onDropdownClick(false, "");
+
+        if (component === props.id) {
+            setDisplay("block");
+        }
+        else {
+            setDisplay("none");
+        }
+    });
+
+    const onClick = () => {
+        if (props.rows.length === 0) {
+            return;
+        }
+
+        if (display !== "block") {
+            props.onDropdownClick(true, props.id);
+            setDisplay("block");
+        }
+        else {
+            setDisplay("none");
         }
     }
 
-    componentDidUpdate() {
-        const component = this.props.showingComponent;
-        if (this.props.canUpdate) {
-            this.props.onDropdownClick(false, null);
-            this.setState(
-                {
-                    display: "none"
-                },
-                () => {
-                    if (component !== null) {
-                        component.setState({
-                            display: "block"
-                        });
-                    }
-                }
-            );
-        }
+    const getCheckedRows = () => {
+        return Utils.getRowsPreview(props.rows);
     }
 
-    onClick() {
-        if (this.props.rows.length > 0) {
-            if (this.state.display !== "block") {
-                this.props.onDropdownClick(true, this);
-                this.setState({
-                    display: "block"
-                });
-            }
-            else {
-                this.setState({
-                    display: "none"
-                });
-            }
-        }
-    }
-
-    onContentClick(e) {
-        e.stopPropagation();
-    }
-
-    getCheckedRows() {
-        return Utils.getRowsPreview(this.props.rows);
-    }
-
-    render() {
-        const checkedRows = this.getCheckedRows();
-
-        return (
-            <div className="dropdown">
-                <button className="dropdown-btn" onClick={this.onClick}>
-                    <p className="dropdown-btn__title">
-                        {this.props.title}
-                    </p>
-                    <p className="dropdown-btn__selected">
-                        {checkedRows}
-                    </p>
-                </button>
-                <div
-                    style={{
-                        display: this.state.display
-                    }}
-                    className="dropdown-content"
-                    onClick={this.onContentClick}
-                >
-                    <Rows onRowClick={this.props.onRowClick} rows={this.props.rows} />
-                </div>
+    return (
+        <div className="dropdown">
+            <button className="dropdown-btn" onClick={onClick}>
+                <p className="dropdown-btn__title">
+                    {props.title}
+                </p>
+                <p className="dropdown-btn__selected">
+                    {getCheckedRows()}
+                </p>
+            </button>
+            <div
+                style={{
+                    display
+                }}
+                className="dropdown-content"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <Rows onRowClick={props.onRowClick} rows={props.rows} />
             </div>
-        );
-    }
+        </div>
+    );
 }
 
 FilterWidgetDropdown.propTypes = {
-    canUpdate: PropTypes.bool.isRequired,
     onDropdownClick: PropTypes.func.isRequired,
-    showingComponent: PropTypes.object,
+    showingComponent: PropTypes.string,
     rows: PropTypes.array.isRequired,
     title: PropTypes.string,
-    onRowClick: PropTypes.func.isRequired
+    onRowClick: PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired,
+    canUpdate: PropTypes.bool.isRequired
 }
 
 FilterWidgetDropdown.defaultProps = {
-    canUpdate: true,
-    showingComponent: null,
+    showingComponent: "",
     rows: [],
     title: "",
     onDropdownClick: () => { },
-    onRowClick: () => { }
+    onRowClick: () => { },
+    id: "",
+    canUpdate: true
 }
 
 export default FilterWidgetDropdown;
