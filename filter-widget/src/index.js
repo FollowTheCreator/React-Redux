@@ -9,7 +9,7 @@ import rootReducer from './reducers/index';
 const tables = document.getElementsByTagName("table");
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
-console.log(tables);
+
 ReactDOM.render(
     <Provider store={store}>
         <App tables={tables} />

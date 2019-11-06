@@ -1,12 +1,7 @@
 import { connect } from 'react-redux';
 import Body from '../components/FilterWidgetBody';
-import {
-    setContexts,
-    setDimensions,
-    addDimensions,
-    setCells,
-    setFilteredCells
-} from '../actions';
+import * as ActionCreators from '../actions';
+import { bindActionCreators } from 'redux'
 
 const mapStateToProps = (state) => {
     return {
@@ -18,12 +13,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => {
+    const boundActionCreators = bindActionCreators(ActionCreators, dispatch)
     return {
-        setContexts: (contexts) => dispatch(setContexts(contexts)),
-        setDimensions: (dimensions) => dispatch(setDimensions(dimensions)),
-        addDimensions: (dimensions) => dispatch(addDimensions(dimensions)),
-        setCells: (cells) => dispatch(setCells(cells)),
-        setFilteredCells: (filteredCells) => dispatch(setFilteredCells(filteredCells))
+        ...boundActionCreators
     };
 };
 

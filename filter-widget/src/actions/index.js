@@ -6,7 +6,9 @@ export const setContextsSuccess = (payload) => ({
     payload
 });
 export const setContexts = (payload) => (dispatch) => {
-    setTimeout(() => {
+    dispatch(setContextsBegin());
+
+    return setTimeout(() => {
         dispatch(setContextsSuccess(payload))
     }, 5000);
 };

@@ -41,18 +41,18 @@ const FilterWidgetBody = (props) => {
 
     useEffect(
         () => {
-            const savedState1 = StateService.getSavedState(getDefaultSearchTypeValue());
-            const stateSaved1 = savedState1.stateSaved;
-            const searchType1 = savedState1.searchType;
-            const sortAsc1 = savedState1.sortAsc;
+            const savedStateStorage = StateService.getSavedState(getDefaultSearchTypeValue());
+            const stateSavedStorage = savedStateStorage.stateSaved;
+            const searchTypeStorage = savedStateStorage.searchType;
+            const sortAscStorage = savedStateStorage.sortAsc;
 
             const contexts = ContextsService.getInitialContexts(props.tables);
             props.setContexts(contexts);
 
-            const sortAscResult = sortAsc1 !== null ? sortAsc1 : true;
-            setSearchType(stateSaved1 === true ? searchType1 : searchType);
-            setSortAsc(stateSaved1 === true ? sortAscResult : sortAsc);
-            setStateSaved(stateSaved1 !== null ? stateSaved1 : false);
+            const sortAscResult = sortAscStorage !== null ? sortAscStorage : true;
+            setSearchType(stateSavedStorage === true ? searchTypeStorage : searchType);
+            setSortAsc(stateSavedStorage === true ? sortAscResult : sortAsc);
+            setStateSaved(stateSavedStorage !== null ? stateSavedStorage : false);
         },
         []
     );
@@ -134,9 +134,7 @@ const FilterWidgetBody = (props) => {
         props.setCells(props.cells.reverse());
         props.setFilteredCells(props.filteredCells.reverse());
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-        const sortAscRes = !sortAsc;
-        setSortAsc(sortAscRes);
+        setSortAsc(!sortAsc);
         setStateSaved(false);
     }
 
@@ -147,7 +145,6 @@ const FilterWidgetBody = (props) => {
     }
 
     const onSaveClick = () => {
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////
         const stateSavedRes = !stateSaved;
         setStateSaved(stateSavedRes);
         StateService.setSavedState({
