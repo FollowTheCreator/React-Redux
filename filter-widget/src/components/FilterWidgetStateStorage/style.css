@@ -1,0 +1,25 @@
+.state-storage{
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    height: 50px;
+    background: rgba(21, 23, 29, 0.4);
+}
+
+.state-storage-btn{
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0px;
+    width: 50%;
+    font-size: 13px;
+    font-family: 'Segoe UI';
+    font-weight: 100;
+    letter-spacing: 3px;
+    color: white;
+    transition-duration: 0.2s;
+    cursor: pointer;
+}
+.state-storage-btn:hover{
+    background: rgba(255, 255, 255, 0.07);
+}

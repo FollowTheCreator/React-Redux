@@ -1,0 +1,36 @@
+.row{
+    display: block;
+    padding: 10px;
+    height: 20px;
+    cursor: pointer;
+    transition-duration: 0.2s;
+}
+.row:hover{
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.row-checkbox{
+    position: relative;
+    display: inline-block;
+    margin-right: 5px;
+    width: 20px;
+    height: 20px;
+    background: rgba(160, 166, 182, 0.4);
+}
+
+.row-checkbox__mark::before{
+    position: relative;
+    content: "\2713";
+    font-size: 11px;
+    margin-left: 5px;
+    color: white;
+}
+
+.row__title{
+    vertical-align: top;
+    line-height: 20px;
+    color: white;
+    font-size: 11px;
+    font-family: 'Segoe UI', sans-serif;
+    letter-spacing: 2px;
+}
